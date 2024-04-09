@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import CartItem from "./CartItem";
 
 const ProductCart = () => {
   return (
@@ -10,7 +11,10 @@ const ProductCart = () => {
           <SheetTrigger asChild>
             <button variant="outline">Open</button>
           </SheetTrigger>
-          <SheetContent>Testing</SheetContent>
+
+          <SheetContent>
+            <CartItem product={product} />
+          </SheetContent>
         </Sheet>
       </div>
     </>
