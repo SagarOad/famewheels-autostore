@@ -1,10 +1,19 @@
+import MainSidebar from "@/components/MainSidebar";
+import Navbar from "@/components/Navbar";
+import ProductsCatalogue from "@/components/ProductsCatalogue";
 import ProductCart from "@/components/productCart";
 
 export default function Home() {
   return (
-    <main className="">
-      <h2 className="">Hello World</h2>
-      <ProductCart />
-    </main>
+    <>
+      {" "}
+      <Navbar />
+      <div className=" bg-[#ffffff]">
+        <main className="max-w-[1600px] mx-auto">
+          <MainSidebar />
+          <ProductCart />
+        </main>
+      </div>
+    </>
   );
 }
