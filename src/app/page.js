@@ -9,7 +9,7 @@ export default function Home() {
       {" "}
       <Navbar />
       <div className=" bg-[#ffffff]">
-        <main className="max-w-[1600px] mx-auto">
+        <main>
           <MainSidebar />
           <ProductCart />
         </main>

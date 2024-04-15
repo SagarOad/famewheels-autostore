@@ -8,6 +8,9 @@ const CartItem = () => {
         product_name: "RoadMax Interior Dressing & Protectant 500ml",
         price: "1,100",
         discount: "30%",
+        category: "Car Covers", 
+        make: "Honda",
+        brand: "Asuki",
         image:
           "https://cache2.pakwheels.com/ad_pictures/9933/roadmax-interior-dressing-and-protectant-500ml-99330559.webp",
       },
@@ -16,6 +19,9 @@ const CartItem = () => {
           "Microfiber Cloth 300 GSM Yellow and Grey 40x40 Pack of 5",
         price: "1,560",
         discount: "30%",
+        category: "Car Shampoo", 
+        make: "Toyota",
+        brand: "Denso",
         image:
           "https://cache2.pakwheels.com/ad_pictures/9608/microfiber-cloth-300gsm-yellow-and-grey-pack-of-3-40x40-96083173.webp",
       },
@@ -23,6 +29,9 @@ const CartItem = () => {
         product_name: "Motor Inside MPP Multi Purpose Protectant 5 Liter",
         price: "6,999",
         discount: "35%",
+        category: "Car Poolish", 
+        make: "Suzuki",
+        brand: "MK",
         image:
           "https://cache1.pakwheels.com/ad_pictures/9929/motor-inside-mpp-multi-purpose-protectant-5-liter-99298292.webp",
       },

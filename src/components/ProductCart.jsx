@@ -13,7 +13,7 @@ const ProductCart = () => {
           </SheetTrigger>
 
           <SheetContent>
-            <CartItem product={product} />
+            <CartItem />
           </SheetContent>
         </Sheet>
       </div>

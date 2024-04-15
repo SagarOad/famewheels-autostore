@@ -102,14 +102,7 @@ function classNames(...classes) {
 export default function MainSidebar() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  const [selectedPerson, setSelectedPerson] = useState();
   const [query, setQuery] = useState("");
-  const filteredPeople =
-    query === ""
-      ? products
-      : products.filter((product) => {
-          return product.toLowerCase().includes(query.toLowerCase());
-        });
 
   return (
     <div className="">
@@ -237,7 +230,6 @@ export default function MainSidebar() {
             </div>
           </Dialog>
         </Transition.Root>
-
         <main className="mx-auto max-full px-4">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-8">
             <h1 className="text-3xl font-[600] tracking-tight text-gray-900">
@@ -246,44 +238,44 @@ export default function MainSidebar() {
 
             <div className="flex items-center">
               <div className=" mr-16">
-                  <label
-                    for="default-search"
-                    class="mb-2 text-sm font-medium text-gray-900 sr-only"
+                <label
+                  for="default-search"
+                  class="mb-2 text-sm font-medium text-gray-900 sr-only"
+                >
+                  Search
+                </label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg
+                      class="w-4 h-4 text-gray-500"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    type="search"
+                    id="default-search"
+                    class="block w-[380px] p-4 ps-10 h-12 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-0"
+                    placeholder="Search Products"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    class="text-white absolute right-0 h-12 bottom-0 bg-[#20409a] focus:ring-4 focus:outline-none font-medium text-[16px] px-6 py-3"
                   >
                     Search
-                  </label>
-                  <div class="relative">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <svg
-                        class="w-4 h-4 text-gray-500"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                        />
-                      </svg>
-                    </div>
-                    <input
-                      type="search"
-                      id="default-search"
-                      class="block w-[380px] p-4 ps-10 h-12 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-0"
-                      placeholder="Search Products"
-                      required
-                    />
-                    <button
-                      type="submit"
-                      class="text-white absolute right-0 h-12 bottom-0 bg-[#20409a] focus:ring-4 focus:outline-none font-medium text-[16px] px-6 py-3"
-                    >
-                      Search
-                    </button>
-                  </div>
+                  </button>
+                </div>
               </div>
               <Menu as="div" className="relative inline-block text-left">
                 <div>
