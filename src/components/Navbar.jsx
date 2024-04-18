@@ -11,7 +11,7 @@ const Navbar = () => {
             <img
               src="https://www.famewheels.com/static/media/fame-wheels-logo.bdbcd17588780f149f99.png"
               class="h-10"
-              alt="Flowbite Logo"
+              alt="Famewheels logo"
             />
           </a>
           <button
