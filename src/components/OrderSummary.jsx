@@ -92,7 +92,7 @@ const OrderSummary = () => {
                   />
                   <img
                     className="w-full md:hidden"
-                    src="https://i.ibb.co/L039qbN/Rectangle-10.png"
+                    src={productsData.products[0].image}
                     alt="dress"
                   />
                 </div>
@@ -103,11 +103,10 @@ const OrderSummary = () => {
                     </h3>
                     <div className="flex justify-start items-start flex-col space-y-2">
                       <p className="text-sm leading-none text-gray-800">
-                        <span className="text-gray-300">Size: </span> Small
+                        <span className="text-gray-300">Make: </span> Honda
                       </p>
                       <p className="text-sm leading-none text-gray-800">
-                        <span className="text-gray-300">Color: </span> Light
-                        Blue
+                        <span className="text-gray-300">Brand: </span> Fusion
                       </p>
                     </div>
                   </div>
@@ -138,7 +137,7 @@ const OrderSummary = () => {
                   />
                   <img
                     className="w-full md:hidden"
-                    src="https://i.ibb.co/L039qbN/Rectangle-10.png"
+                    src={productsData.products[1].image}
                     alt="dress"
                   />
                 </div>
@@ -149,11 +148,10 @@ const OrderSummary = () => {
                     </h3>
                     <div className="flex justify-start items-start flex-col space-y-2">
                       <p className="text-sm leading-none text-gray-800">
-                        <span className="text-gray-300">Size: </span> Small
+                        <span className="text-gray-300">Make: </span> Toyota
                       </p>
                       <p className="text-sm leading-none text-gray-800">
-                        <span className="text-gray-300">Color: </span> Light
-                        Blue
+                        <span className="text-gray-300">Brand: </span> MK
                       </p>
                     </div>
                   </div>
@@ -223,13 +221,13 @@ const OrderSummary = () => {
                 </h3>
                 <div className="flex justify-between items-start w-full">
                   <div className="flex justify-center items-center space-x-4">
-                    <div class="w-8 h-8">
+                    {/* <div class="w-8 h-8">
                       <img
                         class="w-full h-full"
                         alt="logo"
-                        // src="https://i.ibb.co/L8KSdNQ/image-3.png"
+                        src="https://i.ibb.co/L8KSdNQ/image-3.png"
                       />
-                    </div>
+                    </div> */}
                     <div className="flex flex-col justify-start items-center">
                       <p className="text-lg leading-6 font-semibold text-gray-800">
                         DPD Delivery
@@ -245,7 +243,7 @@ const OrderSummary = () => {
                   </p>
                 </div>
                 <div className="w-full flex justify-center items-center">
-                  <button className="hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-gray-800 text-base font-medium leading-4 text-white">
+                  <button className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-[#20409a] text-base font-medium leading-4 text-white">
                     View Carrier Details
                   </button>
                 </div>
