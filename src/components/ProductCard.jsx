@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const ProductCard = ({ product }) => {
   return (
@@ -44,14 +45,16 @@ const ProductCard = ({ product }) => {
             </span>{" "}
           </a>
           <div class="mt-4 px-4 pb-5">
-            <a href="#">
+            <Link href="/ProductPage">
               <h5 class="text-[16px] font-bold tracking-tight text-[#20409a]">
                 {product.product_name}
               </h5>
-            </a>
+            </Link>
             <div class="mt-2 mb-2 flex items-center justify-between">
               <p>
-                <span class="text-xl font-bold text-slate-900">PKR {product.price}</span>
+                <span class="text-xl font-bold text-slate-900">
+                  PKR {product.price}
+                </span>
                 {/* <span class="text-sm text-slate-900 line-through">$699</span> */}
               </p>
             </div>

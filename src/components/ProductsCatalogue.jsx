@@ -27,8 +27,7 @@ const ProductsCatalogue = () => {
           "https://cache1.pakwheels.com/ad_pictures/9929/motor-inside-mpp-multi-purpose-protectant-5-liter-99298292.webp",
       },
       {
-        product_name:
-          "Universal Ket Guage Led Smoke Face Car Auto Tachometer",
+        product_name: "Universal Ket Guage Led Smoke Face Car Auto Tachometer",
         price: "6,800",
         discount: "90%",
         image:
@@ -50,15 +49,15 @@ const ProductsCatalogue = () => {
           "https://cache4.pakwheels.com/ad_pictures/9585/toyota-corolla-gli-xli-side-mirrors-adjustable-power-switch-95850359.webp",
       },
       {
-        product_name: "Universal Front Parking Blind Spot Rear View Fender Mirror WHITE",
+        product_name:
+          "Universal Front Parking Blind Spot Rear View Fender Mirror WHITE",
         price: "1,650",
         discount: "8%",
         image:
           "https://cache2.pakwheels.com/ad_pictures/1291/toyota-fortuner-fender-mirror-12917694.jpg",
       },
       {
-        product_name:
-          "ProOne Motor Oil 5W30 API SP - 4L",
+        product_name: "ProOne Motor Oil 5W30 API SP - 4L",
         price: "6,799",
         discount: "10%",
         image:
@@ -68,13 +67,15 @@ const ProductsCatalogue = () => {
   };
 
   return (
-    <div className="flex flex-wrap">
-      {productsData.products.map((product, index) => (
-        <div key={index} className="m-2">
-          <ProductCard product={product} />
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="flex flex-wrap">
+        {productsData.products.map((product, index) => (
+          <div key={index} className="m-2">
+            <ProductCard product={product} />
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

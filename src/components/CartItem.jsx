@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const CartItem = () => {
@@ -136,12 +137,12 @@ const CartItem = () => {
                 Shipping and taxes calculated at checkout.
               </p>
               <div class="mt-6">
-                <a
-                  href="#"
+                <Link
+                  href="/Checkout"
                   class="flex items-center justify-center rounded-md border border-transparent bg-[#20409a] px-6 py-3 text-base font-medium text-white shadow-sm"
                 >
                   Checkout
-                </a>
+                </Link>
               </div>
               <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
                 <p>

@@ -1,5 +1,7 @@
+"use client"
 import React from "react";
 import productsData from "@/ProductData";
+import SearchBox from "./SearchBox";
 
 const OrderSummary = () => {
   const productsData = {
@@ -66,8 +68,9 @@ const OrderSummary = () => {
     ],
   };
   return (
-    <div>
-      <div className="py-14 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
+    <>
+    <SearchBox />
+      <div className="py-14 px-4 md:px-6 2xl:px-20 2xl:mx-auto">
         <div className="flex justify-start item-start space-y-2 flex-col ">
           <h1 className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9  text-gray-800">
             Order #1
@@ -258,7 +261,7 @@ const OrderSummary = () => {
               <div className="flex flex-col justify-start items-start flex-shrink-0">
                 <div className="flex justify-center  w-full  md:justify-start items-center space-x-4 py-8 border-b border-gray-200">
                   <img
-                  className=" w-[55px]"
+                    className=" w-[55px]"
                     src="https://media.licdn.com/dms/image/D4D03AQEbzZwOnAAfCg/profile-displayphoto-shrink_200_200/0/1709407164448?e=1718841600&v=beta&t=rlUeSUDTiPOrPt7VaSLBCaKv9xlpN8F733q8OraSgiM"
                     alt="avatar"
                   />
@@ -319,7 +322,7 @@ const OrderSummary = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
+@import "~swiper/css";
+@import "~swiper/css/navigation";
+@import "~swiper/css/thumbs";
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -74,4 +76,11 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.main-banner {
+  background-image: linear-gradient(to right, #6c0202, #6c0202b6), url(../assets/carParts.jpg);
+  background-position: center;
+  background-size: cover;
+  background-size: cover;
 }
