@@ -81,7 +81,7 @@ const page = ({ product }) => {
                   <div className="flex -mx-2 mb-4"></div>
                 </div>
               </div>
-              <div className="md:col-span-5 col-span-12 px-4">
+              <div className="md:col-span-5 col-span-12 pl-24">
                 <h2 className="mb-2 leading-tight tracking-tight font-bold text-[#20409a] text-2xl md:text-3xl">
                   RoadMax Interior Dressing & Protectant 500ml
                 </h2>
@@ -200,7 +200,7 @@ const page = ({ product }) => {
                   </p>
                 </div>
               </div>
-              <div className="md:col-span-5 col-span-12 px-4 py-6">
+              <div className="md:col-span-5 col-span-12 pl-24 py-6">
                 <SellerDetailBox />
               </div>
             </div>
