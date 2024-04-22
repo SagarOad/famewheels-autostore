@@ -1,7 +1,7 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 
-const ProductsCatalogue = () => {
+const ProductsCatalogue = ({ viewMode }) => {
   const productsData = {
     products: [
       {
@@ -68,13 +68,25 @@ const ProductsCatalogue = () => {
 
   return (
     <>
-      <div className="flex flex-wrap">
-        {productsData.products.map((product, index) => (
-          <div key={index} className="m-2">
-            <ProductCard product={product} />
-          </div>
-        ))}
-      </div>
+      {viewMode === "grid" ? (
+        <div className="flex flex-wrap">
+          {productsData.products.map((product, index) => (
+            <div key={index} className="m-2">
+              <ProductCard product={product} viewMode={viewMode} />{" "}
+              {/* Pass viewMode prop here */}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="">
+          {productsData.products.map((product, index) => (
+            <div key={index} className="m-2">
+              <ProductCard product={product} viewMode={viewMode} />{" "}
+              {/* Pass viewMode prop here */}
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 };

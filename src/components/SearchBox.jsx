@@ -17,7 +17,7 @@ import {
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
 
-const SearchBox = () => {
+const SearchBox = ({ toggleViewMode }) => {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
@@ -124,6 +124,7 @@ const SearchBox = () => {
 
           <button
             type="button"
+            onClick={toggleViewMode}
             className="-m-2 ml-5 p-2 text-gray-900 hover:text-gray-500 sm:ml-7"
           >
             <span className="sr-only">View grid</span>

@@ -5,28 +5,24 @@ import ProductsCatalogue from "./ProductsCatalogue";
 import SearchBox from "./SearchBox";
 import SideFilters from "./SideFilters";
 
-export default function MainSidebar() {
+export default function MainSidebar({ viewMode }) {
   return (
     <div className="">
       <div>
-        {/* Mobile filter dialog */}
-        <main className="mx-auto max-full px-4">
-          <SearchBox />
-          <section aria-labelledby="products-heading" className="pb-24 pt-6">
-            <h2 id="products-heading" className="sr-only">
-              Products
-            </h2>
+        <section aria-labelledby="products-heading" className="pb-24 pt-6">
+          <h2 id="products-heading" className="sr-only">
+            Products
+          </h2>
 
-            <div className=" grid grid-cols-10">
-              <div className="md:col-span-2">
-                <SideFilters />
-              </div>
-              <div className="md:col-span-8 pl-12">
-                <ProductsCatalogue />
-              </div>
+          <div className=" grid grid-cols-10">
+            <div className="md:col-span-2">
+              <SideFilters />
             </div>
-          </section>
-        </main>
+            <div className="md:col-span-8 pl-12">
+              <ProductsCatalogue viewMode={viewMode} />
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
