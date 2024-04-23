@@ -6,6 +6,12 @@ import SearchBox from "./SearchBox";
 import SideFilters from "./SideFilters";
 
 export default function MainSidebar({ viewMode }) {
+  const [cartItems, setCartItems] = useState([]);
+
+  const addToCart = (product) => {
+    setCartItems([...cartItems, product]);
+    console.log("Product added to cart");
+  };
   return (
     <div className="">
       <div>
@@ -19,7 +25,7 @@ export default function MainSidebar({ viewMode }) {
               <SideFilters />
             </div>
             <div className="md:col-span-8 pl-12">
-              <ProductsCatalogue viewMode={viewMode} />
+              <ProductsCatalogue viewMode={viewMode} addToCart={addToCart} />
             </div>
           </div>
         </section>

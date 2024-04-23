@@ -1,7 +1,11 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import ProductCard from "./ProductCard";
 
-const ProductsCatalogue = ({ viewMode }) => {
+const ProductsCatalogue = ({ viewMode, addToCart }) => {
+
+
   const productsData = {
     products: [
       {
@@ -74,7 +78,11 @@ const ProductsCatalogue = ({ viewMode }) => {
         <div className="flex flex-wrap">
           {productsData.products.map((product, index) => (
             <div key={index} className="m-2">
-              <ProductCard product={product} viewMode={viewMode} />{" "}
+              <ProductCard
+                product={product}
+                viewMode={viewMode}
+                addToCart={addToCart}
+              />{" "}
             </div>
           ))}
         </div>
@@ -82,7 +90,11 @@ const ProductsCatalogue = ({ viewMode }) => {
         <div className="">
           {productsData.products.map((product, index) => (
             <div key={index} className="m-2">
-              <ProductCard product={product} viewMode={viewMode} />{" "}
+              <ProductCard
+                product={product}
+                viewMode={viewMode}
+                addToCart={addToCart}
+              />{" "}
             </div>
           ))}
         </div>

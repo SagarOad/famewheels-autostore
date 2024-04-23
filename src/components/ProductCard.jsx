@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-const ProductCard = ({ product, viewMode }) => {
+const ProductCard = ({ product, viewMode, addToCart }) => {
   return (
     <>
       {viewMode === "grid" ? (
@@ -60,15 +60,15 @@ const ProductCard = ({ product, viewMode }) => {
                     {/* <span class="text-sm text-slate-900 line-through">$699</span> */}
                   </p>
                 </div>
-                <a
+                <button
                   href="#"
-                  class="flex items-center justify-center border-2 mb-2 border-[#b80505]  rounded-md bg-text bg-white px-5 py-2 text-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300"
+                  class="flex items-center justify-center w-full border-2 mb-2 border-[#b80505]  rounded-md bg-text bg-white px-5 py-2 text-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300"
                 >
                   Buy Now
-                </a>
+                </button>
                 <a
-                  href="#"
-                  class="flex items-center justify-center rounded-md bg-[#b80505] px-5 py-2 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                  className="flex items-center justify-center rounded-md bg-[#b80505] px-5 py-2 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                  onClick={() => addToCart(product)}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +137,10 @@ const ProductCard = ({ product, viewMode }) => {
                     </p>
                   </div>
                   <div>
-                    <button className="border-2 border-[#b80505] rounded-md px-4 py-2 text-sm font-medium mr-2">
+                    <button
+                      className="border-2 border-[#b80505] rounded-md px-4 py-2 text-sm font-medium mr-2"
+                      onClick={() => addToCart(product)}
+                    >
                       Add to Cart
                     </button>
                     <button className="border-2 border-[#b80505] bg-[#b80505] text-white rounded-md px-4 py-2 text-sm font-medium">
