@@ -92,7 +92,77 @@ const ProductCard = ({ product, viewMode }) => {
         </div>
       ) : (
         <div>
-          sa
+          <div className="w-full border relative border-[#cccccc] bg-white shadow-lg rounded-lg mb-4 p-4">
+            <div className="flex w-full">
+              <div>
+                <img
+                  className=" w-[320px] h-[180px] object-cover mr-4"
+                  src={product.image}
+                  alt="product image"
+                />
+              </div>
+              <div className="w-full flex flex-col justify-between px-3 py-2">
+                <div className="flex justify-between items-start">
+                  <Link href="/ProductPage">
+                    <div className=" w-[70%]">
+                      <h5 className="text-[21px] font-[600] text-[#20409a] mb-1">
+                        {product.product_name}
+                      </h5>
+                      <p className="text-[16px] text-gray-500">
+                        {product.description}
+                      </p>
+                    </div>
+                  </Link>
+                  <div className=" flex justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-12 h-8"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-[22px] text-slate-900 font-[600]">
+                      PKR {product.price}
+                    </p>
+                  </div>
+                  <div>
+                    <button className="border-2 border-[#b80505] rounded-md px-4 py-2 text-sm font-medium mr-2">
+                      Add to Cart
+                    </button>
+                    <button className="border-2 border-[#b80505] bg-[#b80505] text-white rounded-md px-4 py-2 text-sm font-medium">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 inline-block mr-1"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm10 10a1 1 0 01-2 0 1 1 0 012 0zm-8-2a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM8 7a1 1 0 012 0v6a1 1 0 11-2 0V7z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      Buy Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span className="text-[12px] absolute top-0 left-0 bg-white flex justify-center items-center font-medium text-[#b80505] border border-[#b80505] rounded-md px-3 py-1 mr-2">
+              {product.discount} OFF
+            </span>
+          </div>
         </div>
       )}
     </>

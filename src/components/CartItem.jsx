@@ -2,14 +2,13 @@ import Link from "next/link";
 import React from "react";
 
 const CartItem = () => {
-
   const cartData = {
     products: [
       {
         product_name: "RoadMax Interior Dressing & Protectant 500ml",
         price: "1,100",
         discount: "30%",
-        category: "Car Covers", 
+        category: "Car Covers",
         make: "Honda",
         brand: "Asuki",
         image:
@@ -20,7 +19,7 @@ const CartItem = () => {
           "Microfiber Cloth 300 GSM Yellow and Grey 40x40 Pack of 5",
         price: "1,560",
         discount: "30%",
-        category: "Car Shampoo", 
+        category: "Car Shampoo",
         make: "Toyota",
         brand: "Denso",
         image:
@@ -30,7 +29,7 @@ const CartItem = () => {
         product_name: "Motor Inside MPP Multi Purpose Protectant 5 Liter",
         price: "6,999",
         discount: "35%",
-        category: "Car Poolish", 
+        category: "Car Poolish",
         make: "Suzuki",
         brand: "MK",
         image:
@@ -70,7 +69,9 @@ const CartItem = () => {
                         <div>
                           <div class="flex justify-between text-base font-medium text-gray-900">
                             <h3>
-                              <a href="#">{cartData.products[0].product_name}</a>
+                              <a href="#">
+                                {cartData.products[0].product_name}
+                              </a>
                             </h3>
                             <p class="ml-4">PKR {cartData.products[0].price}</p>
                           </div>

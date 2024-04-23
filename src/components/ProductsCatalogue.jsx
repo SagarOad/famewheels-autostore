@@ -8,6 +8,8 @@ const ProductsCatalogue = ({ viewMode }) => {
         product_name: "RoadMax Interior Dressing & Protectant 500ml",
         price: "1,100",
         discount: "30%",
+        description:
+          "Sunshades will shield the skin from UV rays by absorbing the rays that come from the outside.",
         image:
           "https://cache2.pakwheels.com/ad_pictures/9933/roadmax-interior-dressing-and-protectant-500ml-99330559.webp",
       },
@@ -73,7 +75,6 @@ const ProductsCatalogue = ({ viewMode }) => {
           {productsData.products.map((product, index) => (
             <div key={index} className="m-2">
               <ProductCard product={product} viewMode={viewMode} />{" "}
-              {/* Pass viewMode prop here */}
             </div>
           ))}
         </div>
@@ -82,7 +83,6 @@ const ProductsCatalogue = ({ viewMode }) => {
           {productsData.products.map((product, index) => (
             <div key={index} className="m-2">
               <ProductCard product={product} viewMode={viewMode} />{" "}
-              {/* Pass viewMode prop here */}
             </div>
           ))}
         </div>
