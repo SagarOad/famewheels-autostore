@@ -1,8 +1,6 @@
-import MainBanner from "@/components/MainBanner";
-import MainSidebar from "@/components/MainSidebar";
-import MainSidebarWrapper from "@/components/MainSidebarWrapper";
-import ProductsCatalogue from "@/components/ProductsCatalogue";
-import ProductCart from "@/components/productCart";
+import MainBanner from "@/components/MainBanner/MainBanner";
+import MainSidebarWrapper from "@/components/MainSidebar/MainSidebarWrapper";
+import ProductCart from "@/components/ProductCart/ProductCart";
 
 export default function Home() {
   return (

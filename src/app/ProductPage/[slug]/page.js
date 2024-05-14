@@ -1,10 +1,20 @@
 "use client";
 
 import ProductImageSlide from "@/components/ProductImageSlide";
-import SearchBox from "@/components/SearchBox";
+// import SearchBox from "@/components/SearchBox";
 import SellerDetailBox from "@/components/SellerDetailBox";
-import React from "react";
-const page = ({ product }) => {
+import { data } from "autoprefixer";
+import React, { useState, useEffect } from "react";
+import loader from "../../../assets/timer.gif"
+import axios from "axios";
+
+const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+
+const page = ({ params }) => {
+  const [productData, setProductData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const images = [
     {
       original:
@@ -21,9 +31,38 @@ const page = ({ product }) => {
       thumbnail: "https://picsum.photos/id/1019/250/150/",
     },
   ];
+
+  console.log(params.slug);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          `${BASE_URL}/product-detail/?product_id=${params.slug}`
+        );
+        setProductData(response.data);
+      } catch (error) {
+        setError("Error fetching data");
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [params.slug]);
+
+  if (loading)
+    return (
+      <div className=" w-full h-[100vh] mt-[-112px] flex justify-center items-center">
+        <div class="loader"></div>
+      </div>
+    );
+  if (error) return <p>{error}</p>;
+
+  console.log(params.slug, "Testing");
   return (
     <>
-    <SearchBox />
+      {/* <SearchBox /> */}
       <div className="antialiased">
         <div className="py-16">
           <div className=" px-4 sm:px-6 lg:px-8">
@@ -83,7 +122,8 @@ const page = ({ product }) => {
               </div>
               <div className="md:col-span-5 col-span-12 pl-24">
                 <h2 className="mb-2 leading-tight tracking-tight font-bold text-[#20409a] text-2xl md:text-3xl">
-                  RoadMax Interior Dressing & Protectant 500ml
+                  {/* Product title */}
+                  {productData?.products.product_title}
                 </h2>
                 <p className="text-gray-500 text-sm">
                   By{" "}
@@ -97,7 +137,7 @@ const page = ({ product }) => {
                     <div className="rounded-lg bg-[#b8050521] flex py-2 px-3">
                       <span className="text-slate-900 text-2xl mr-1">PKR</span>
                       <span className="font-bold text-slate-900 text-3xl">
-                        1,100
+                        {productData?.products.product_discounted_price}
                       </span>
                     </div>
                   </div>
@@ -109,11 +149,7 @@ const page = ({ product }) => {
                 </div>
                 <div>
                   <p className="text-slate-900 text-[16px]">
-                    Revitalize your interior with RoadMax Interior Dressing &
-                    Protectant. Restore the original shine to your interior
-                    surfaces. Cleans, shines, freshens, and shields against UV
-                    damage. Medium shine with a non-greasy formula. Elevate your
-                    detailing game to the pinnacle of perfection.
+                    {productData?.products.product_description}
                   </p>
                 </div>
                 <div className="flex py-4 space-x-4">
@@ -155,7 +191,7 @@ const page = ({ product }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-12 mt-14 -mx-4">
+            <div className="grid grid-cols-12 mt-20 -mx-4">
               <div className="md:col-span-7 col-span-12 px-4">
                 <div>
                   <h2 className=" text-[20px] font-bold mt-14">

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import CartItem from "./CartItem";
+import CartItem from "../CartItem";
 
 const ProductCart = () => {
   return (

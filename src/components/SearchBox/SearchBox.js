@@ -1,7 +1,7 @@
 import React from "react";
 import { Fragment, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import CartItem from "./CartItem";
+import CartItem from "../CartItem";
 
 import {
   Dialog,
@@ -21,7 +21,6 @@ import {
 
 const SearchBox = ({ toggleViewMode }) => {
   const [cartItems, setCartItems] = useState([]);
-
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
