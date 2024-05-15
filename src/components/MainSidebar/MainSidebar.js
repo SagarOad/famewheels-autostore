@@ -1,16 +1,16 @@
 "use client";
 import { Fragment, useState } from "react";
-
 import ProductsCatalogue from "./ProductsCatalogue";
 import SideFilters from "./SideFilters";
 
-export default function MainSidebar({ viewMode, filters, setFilters }) {
+export default function MainSidebar({ viewMode, filters, setFilters, searchQuery }) { // Accept searchQuery as a prop
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (product) => {
     setCartItems([...cartItems, product]);
     console.log("Product added to cart");
   };
+
   return (
     <div className="">
       <div>
@@ -19,12 +19,17 @@ export default function MainSidebar({ viewMode, filters, setFilters }) {
             Products
           </h2>
 
-          <div className=" grid grid-cols-10">
+          <div className="grid grid-cols-10">
             <div className="md:col-span-2">
               <SideFilters filters={filters} setFilters={setFilters} />
             </div>
             <div className="md:col-span-8 pl-12">
-              <ProductsCatalogue viewMode={viewMode} addToCart={addToCart} filters={filters} />
+              <ProductsCatalogue
+                viewMode={viewMode}
+                addToCart={addToCart}
+                filters={filters}
+                searchQuery={searchQuery} // Pass searchQuery prop here
+              />
             </div>
           </div>
         </section>

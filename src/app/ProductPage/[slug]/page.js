@@ -5,8 +5,11 @@ import ProductImageSlide from "@/components/ProductImageSlide";
 import SellerDetailBox from "@/components/SellerDetailBox";
 import { data } from "autoprefixer";
 import React, { useState, useEffect } from "react";
-import loader from "../../../assets/timer.gif"
+import loader from "../../../assets/timer.gif";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
@@ -14,6 +17,7 @@ const page = ({ params }) => {
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [quantity, setQuantity] = useState(1);
 
   const images = [
     {
@@ -51,22 +55,44 @@ const page = ({ params }) => {
     fetchData();
   }, [params.slug]);
 
+  const handleAddToCart = async () => {
+
+const formData = new FormData()
+
+formData.append("product_id",params.slug)
+formData.append("product_name",productData?.products.product_title)
+formData.append("quantity",quantity)
+formData.append("user_id",4)
+
+    try {
+      const response = await axios.post(`${BASE_URL}/add-to-cart`, formData,{
+        headers:{
+          Authorization:`Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZmFtZXdoZWVscy1iYWNrZW5kLnRlc3QvbG9naW4iLCJpYXQiOjE3MTU3ODIxODgsImV4cCI6MTc0NzMxODE4OCwibmJmIjoxNzE1NzgyMTg4LCJqdGkiOiJFdVFNVmVvWVpCelBVbWhmIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.AVslxMDNwytRaYWpOaCKLbNRYd3jfBYUXEvwufGdRCM`
+        }
+      });
+      console.log("Added to cart:", response.data);
+    } catch (error) {
+      toast.error("Error adding to cart")
+      console.error("Error adding to cart:", error);
+    }
+  };
+
   if (loading)
     return (
       <div className=" w-full h-[100vh] mt-[-112px] flex justify-center items-center">
         <div class="loader"></div>
       </div>
     );
-  if (error) return <p>{error}</p>;
-
-  console.log(params.slug, "Testing");
+  // if (error) return <p>{error}</p>;
   return (
     <>
       {/* <SearchBox /> */}
+      <div>{error !== null ? <p>{error}</p> : ""}</div>
+
       <div className="antialiased">
         <div className="py-16">
           <div className=" px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center space-x-2 text-gray-400 text-sm">
+            {/* <div className="flex items-center space-x-2 text-gray-400 text-sm">
               <a href="#" className="hover:underline hover:text-gray-600">
                 Home
               </a>
@@ -106,7 +132,7 @@ const page = ({ params }) => {
                 </svg>
               </span>
               <span>Headphones</span>
-            </div>
+            </div> */}
           </div>
 
           <div className=" px-4 sm:px-6 lg:px-8 mt-6">
@@ -157,12 +183,16 @@ const page = ({ params }) => {
                     <div className="text-center left-0 pt-2 right-0 absolute block text-xs uppercase text-gray-400 tracking-wide font-semibold">
                       Qty
                     </div>
-                    <select className="cursor-pointer appearance-none rounded-xl border border-gray-200 pl-4 pr-8 h-14 flex items-end pb-1">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
+                    <select
+                      className="cursor-pointer appearance-none rounded-xl border border-gray-200 pl-4 pr-8 h-14 flex items-end pb-1"
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                    >
+                      {[1, 2, 3, 4, 5].map((qty) => (
+                        <option key={qty} value={qty}>
+                          {qty}
+                        </option>
+                      ))}
                     </select>
 
                     <svg
@@ -184,6 +214,7 @@ const page = ({ params }) => {
                   <button
                     type="button"
                     className="h-14 px-6 py-2 font-semibold bg-[#20409a] text-white"
+                    onClick={handleAddToCart}
                   >
                     Add to Cart
                   </button>

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import productsData from "@/ProductData";
-import SearchBox from "./SearchBox";
+import SearchBox from "../components/SearchBox/SearchBox";
 
 const OrderSummary = () => {
   const productsData = {
