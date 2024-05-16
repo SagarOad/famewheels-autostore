@@ -10,7 +10,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 const page = ({ params }) => {
@@ -56,25 +55,29 @@ const page = ({ params }) => {
   }, [params.slug]);
 
   const handleAddToCart = async () => {
+    const formData = new FormData();
 
-const formData = new FormData()
-
-formData.append("product_id",params.slug)
-formData.append("product_name",productData?.products.product_title)
-formData.append("quantity",quantity)
-formData.append("user_id",4)
+    formData.append("product_id", params.slug);
+    formData.append("product_name", productData?.products.product_title);
+    formData.append("product_quantity", quantity);
+    formData.append(
+      "product_price",
+      productData?.products.product_actual_price
+    );
 
     try {
-      const response = await axios.post(`${BASE_URL}/add-to-cart`, formData,{
-        headers:{
-          Authorization:`Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZmFtZXdoZWVscy1iYWNrZW5kLnRlc3QvbG9naW4iLCJpYXQiOjE3MTU3ODIxODgsImV4cCI6MTc0NzMxODE4OCwibmJmIjoxNzE1NzgyMTg4LCJqdGkiOiJFdVFNVmVvWVpCelBVbWhmIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.AVslxMDNwytRaYWpOaCKLbNRYd3jfBYUXEvwufGdRCM`
-        }
+      const response = await axios.post(`${BASE_URL}/add-to-cart`, formData, {
+        headers: {
+          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZmFtZXdoZWVscy1iYWNrZW5kLnRlc3QvbG9naW4iLCJpYXQiOjE3MTU3ODIxODgsImV4cCI6MTc0NzMxODE4OCwibmJmIjoxNzE1NzgyMTg4LCJqdGkiOiJFdVFNVmVvWVpCelBVbWhmIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.AVslxMDNwytRaYWpOaCKLbNRYd3jfBYUXEvwufGdRCM`,
+        },
       });
       console.log("Added to cart:", response.data);
     } catch (error) {
-      toast.error("Error adding to cart")
+      toast.error("Error adding to cart");
       console.error("Error adding to cart:", error);
     }
+
+    toast.success("Added to cart successfully");
   };
 
   if (loading)
@@ -268,7 +271,75 @@ formData.append("user_id",4)
                 </div>
               </div>
               <div className="md:col-span-5 col-span-12 pl-24 py-6">
-                <SellerDetailBox />
+                <div className="">
+                  <div className="flex">
+                    <div className="flex">
+                      <div className=" border-[1px] border-black">
+                        <h2 className=" text-[20px] font-[400] py-3 border-b-2 text-center">
+                          Seller Detials
+                        </h2>
+                        <div className=" px-12">
+                          <div className=" flex justify-center items-center">
+                            <div>
+                              <img
+                                className=" w-[60px] mr-5"
+                                src="https://fcache1.pakwheels.com/original/4X/9/4/8/948a620e5554ab2acc6975fbe515a1c81c408f77.jpg"
+                              />
+                            </div>
+                            <div>
+                              <h2 className="text-[#20409a] text-[14px]">
+                                {productData?.products.vendor_name}
+                              </h2>
+                              <a className="text-[14px]">
+                                More ads by {productData?.products.vendor_name}
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <div className=" flex justify-center pt-3 pb-4 items-center">
+                            <div className=" mx-2 bg-[#20409a] w-10 h-10 rounded-full flex justify-center items-center text-white">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="w-6 h-6"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
+                                />
+                              </svg>
+                            </div>
+                            <div className=" mx-2 bg-[#20409a] w-10 h-10 rounded-full flex justify-center items-center text-white">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="w-6 h-6"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border-[1px] border-black w-[300px] flex justify-center items-center">
+                      <div>Ad Space</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -1,42 +1,100 @@
+"use client";
+
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ProductCard from "./ProductCard/ProductCard";
+
+const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 const CartItem = () => {
+  const [ProductCartData, SetProductCartData] = useState(null);
+  const [ProductCartImgPath, SetProductCartImgPath] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // const cartData = {
+  //   products: [
+  //     {
+  //       product_name: "RoadMax Interior Dressing & Protectant 500ml",
+  //       price: "1,100",
+  //       discount: "30%",
+  //       category: "Car Covers",
+  //       make: "Honda",
+  //       brand: "Asuki",
+  //       image:
+  //         "https://cache2.pakwheels.com/ad_pictures/9933/roadmax-interior-dressing-and-protectant-500ml-99330559.webp",
+  //     },
+  //     {
+  //       product_name:
+  //         "Microfiber Cloth 300 GSM Yellow and Grey 40x40 Pack of 5",
+  //       price: "1,560",
+  //       discount: "30%",
+  //       category: "Car Shampoo",
+  //       make: "Toyota",
+  //       brand: "Denso",
+  //       image:
+  //         "https://cache2.pakwheels.com/ad_pictures/9608/microfiber-cloth-300gsm-yellow-and-grey-pack-of-3-40x40-96083173.webp",
+  //     },
+  //     {
+  //       product_name: "Motor Inside MPP Multi Purpose Protectant 5 Liter",
+  //       price: "6,999",
+  //       discount: "35%",
+  //       category: "Car Poolish",
+  //       make: "Suzuki",
+  //       brand: "MK",
+  //       image:
+  //         "https://cache1.pakwheels.com/ad_pictures/9929/motor-inside-mpp-multi-purpose-protectant-5-liter-99298292.webp",
+  //     },
+  //   ],
+  // };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/view-cart`, {
+          headers: {
+            Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZmFtZXdoZWVscy1iYWNrZW5kLnRlc3QvbG9naW4iLCJpYXQiOjE3MTU3ODIxODgsImV4cCI6MTc0NzMxODE4OCwibmJmIjoxNzE1NzgyMTg4LCJqdGkiOiJFdVFNVmVvWVpCelBVbWhmIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.AVslxMDNwytRaYWpOaCKLbNRYd3jfBYUXEvwufGdRCM`,
+          },
+        });
+        console.log(
+          response?.data.products,
+          "Product data fetched successfully"
+        );
+
+        SetProductCartData(response?.data.products);
+        SetProductCartImgPath(response?.data?.imagepath)
+      } catch (error) {
+        setError("Error fetching data");
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const cartData = {
-    products: [
-      {
-        product_name: "RoadMax Interior Dressing & Protectant 500ml",
-        price: "1,100",
-        discount: "30%",
-        category: "Car Covers",
-        make: "Honda",
-        brand: "Asuki",
-        image:
-          "https://cache2.pakwheels.com/ad_pictures/9933/roadmax-interior-dressing-and-protectant-500ml-99330559.webp",
-      },
-      {
-        product_name:
-          "Microfiber Cloth 300 GSM Yellow and Grey 40x40 Pack of 5",
-        price: "1,560",
-        discount: "30%",
-        category: "Car Shampoo",
-        make: "Toyota",
-        brand: "Denso",
-        image:
-          "https://cache2.pakwheels.com/ad_pictures/9608/microfiber-cloth-300gsm-yellow-and-grey-pack-of-3-40x40-96083173.webp",
-      },
-      {
-        product_name: "Motor Inside MPP Multi Purpose Protectant 5 Liter",
-        price: "6,999",
-        discount: "35%",
-        category: "Car Poolish",
-        make: "Suzuki",
-        brand: "MK",
-        image:
-          "https://cache1.pakwheels.com/ad_pictures/9929/motor-inside-mpp-multi-purpose-protectant-5-liter-99298292.webp",
-      },
-    ],
+    products: ProductCartData?.map((product) => ({
+      image: `${ProductCartImgPath}/${product.product_cover}`,
+      product_name: product.product_name,
+      price: product.total_amount,
+      quantity: product.product_quantity,
+    })),
   };
+
+  console.log(cartData, "testing");
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div>
@@ -74,10 +132,11 @@ const CartItem = () => {
                               </h3>
                               <p className="ml-4">PKR {product.price}</p>
                             </div>
-                            {/* <p className="mt-1 text-sm text-gray-500">Salmon</p> */}
                           </div>
                           <div className="flex flex-1 items-end justify-between text-sm">
-                            <p className="text-gray-500">Qty 1</p>
+                            <p className="text-gray-500">
+                              Qty 1 {product.quantity}
+                            </p>
 
                             <div className="flex">
                               <button
