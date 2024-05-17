@@ -14,7 +14,6 @@ const ProductsCatalogue = ({ viewMode, addToCart, filters, searchQuery }) => {
 
   useEffect(() => {
     let timeoutId;
-
     const fetchData = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/product-list-public`, {

@@ -21,17 +21,21 @@ const page = ({ params }) => {
   const images = [
     {
       original:
-        "https://cache2.pakwheels.com/ad_pictures/9933/roadmax-interior-dressing-and-protectant-500ml-99330559.webp",
+        "https://www.buyautoparts.com/data/all_images/MP0162A_DHBX-map.jpg",
       thumbnail:
-        "https://cache2.pakwheels.com/ad_pictures/9933/roadmax-interior-dressing-and-protectant-500ml-99330559.webp",
+        "https://www.buyautoparts.com/data/all_images/MP0162A_DHBX-map.jpg",
     },
     {
-      original: "https://picsum.photos/id/1015/1000/600/",
-      thumbnail: "https://picsum.photos/id/1015/250/150/",
+      original:
+        "https://www.buyautoparts.com/data/all_images/MP0162B_DHBX-map.jpg",
+      thumbnail:
+        "https://www.buyautoparts.com/data/all_images/MP0162B_DHBX-map.jpg",
     },
     {
-      original: "https://picsum.photos/id/1019/1000/600/",
-      thumbnail: "https://picsum.photos/id/1019/250/150/",
+      original:
+        "https://www.buyautoparts.com/data/all_images/MP0162C_DHBX-map.jpg",
+      thumbnail:
+        "https://www.buyautoparts.com/data/all_images/MP0162C_DHBX-map.jpg",
     },
   ];
 
@@ -80,6 +84,20 @@ const page = ({ params }) => {
     toast.success("Added to cart successfully");
   };
 
+  const productActualPrice = productData?.products?.product_actual_price;
+  const productDiscountPrice = productData?.products?.product_discounted_price;
+
+  let discountPercentage = 0;
+  let amountSaved = 0;
+
+  if (productActualPrice && productDiscountPrice) {
+    discountPercentage = (
+      ((productActualPrice - productDiscountPrice) / productActualPrice) *
+      100
+    ).toFixed(2);
+    amountSaved = (productActualPrice - productDiscountPrice).toFixed(2);
+  }
+
   if (loading)
     return (
       <div className=" w-full h-[100vh] mt-[-112px] flex justify-center items-center">
@@ -95,7 +113,7 @@ const page = ({ params }) => {
       <div className="antialiased">
         <div className="py-16">
           <div className=" px-4 sm:px-6 lg:px-8">
-            {/* <div className="flex items-center space-x-2 text-gray-400 text-sm">
+            <div className="flex items-center space-x-2 text-gray-400 text-sm">
               <a href="#" className="hover:underline hover:text-gray-600">
                 Home
               </a>
@@ -135,38 +153,53 @@ const page = ({ params }) => {
                 </svg>
               </span>
               <span>Headphones</span>
-            </div> */}
+            </div>
           </div>
 
           <div className=" px-4 sm:px-6 lg:px-8 mt-6">
             <div className="grid grid-cols-12 -mx-4">
-              <div className="md:col-span-7 col-span-12 px-4">
+              <div className="md:col-span-6 relative col-span-12 px-4">
                 <div x-data="{ image: 1 }" x-cloak>
                   <div className="h-64 md:h-80 rounded-lg bg-gray-100 mb-4">
-                    <ProductImageSlide images={images} />
+                    <div className=" discount"></div>
+                    <ProductImageSlide discountPercentage={discountPercentage} images={images} />
                   </div>
 
                   <div className="flex -mx-2 mb-4"></div>
                 </div>
               </div>
-              <div className="md:col-span-5 col-span-12 pl-24">
-                <h2 className="mb-2 leading-tight tracking-tight font-bold text-[#20409a] text-2xl md:text-3xl">
+              <div className="md:col-span-6 col-span-12 pl-4">
+                <h2 className="mb-2 leading-tight roboto-condensed tracking-tight font-bold text-[#20409a] text-2xl md:text-4xl">
                   {/* Product title */}
                   {productData?.products.product_title}
                 </h2>
                 <p className="text-gray-500 text-sm">
                   By{" "}
                   <a href="#" className="text-[#20409a] hover:underline">
-                    ABC Company
+                    {productData?.products.vendor_name}
                   </a>
                 </p>
 
                 <div className="flex items-center space-x-4 my-4">
                   <div>
-                    <div className="rounded-lg bg-[#b8050521] flex py-2 px-3">
-                      <span className="text-slate-900 text-2xl mr-1">PKR</span>
+                    <div className="rounded-lg flex py-2 px-3">
+                      <span className="text-slate-900 text-3xl mr-1">
+                        Rs {"  "}
+                      </span>
                       <span className="font-bold text-slate-900 text-3xl">
                         {productData?.products.product_discounted_price}
+                      </span>
+                    </div>
+                    <div className="py-2 px-3">
+                      <span>Original Price </span>
+                      <span className=" font-bold line-through">
+                        Rs {productData?.products.product_actual_price}
+                      </span>
+                    </div>
+                    <div className="py-2 px-3">
+                      <span>You Save: </span>
+                      <span className=" font-bold text-[#39b54a]">
+                        Rs ${amountSaved}
                       </span>
                     </div>
                   </div>
@@ -176,30 +209,18 @@ const page = ({ params }) => {
                     {/* <p className="text-gray-400 text-sm">Inclusive of all Taxes.</p> */}
                   </div>
                 </div>
-                <div>
-                  <p className="text-slate-900 text-[16px]">
-                    {productData?.products.product_description}
-                  </p>
-                </div>
+                <div></div>
                 <div className="flex py-4 space-x-4">
-                  <div className="relative">
-                    <div className="text-center left-0 pt-2 right-0 absolute block text-xs uppercase text-gray-400 tracking-wide font-semibold">
-                      Qty
-                    </div>
-                    <select
-                      className="cursor-pointer appearance-none rounded-xl border border-gray-200 pl-4 pr-8 h-14 flex items-end pb-1"
-                      value={quantity}
-                      onChange={(e) => setQuantity(e.target.value)}
-                    >
-                      {[1, 2, 3, 4, 5].map((qty) => (
-                        <option key={qty} value={qty}>
-                          {qty}
-                        </option>
-                      ))}
-                    </select>
-
+                  <button
+                    type="button"
+                    className="px-20 text-[24px] font-semibold bg-[#20409a] text-white"
+                    onClick={handleAddToCart}
+                  >
+                    Add to Cart
+                  </button>
+                  <div>
                     <svg
-                      className="w-5 h-5 text-gray-400 absolute right-0 bottom-0 mb-2 mr-2"
+                      className="w-5 h-5 text-gray-400 absolute right-0 bottom-0"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -212,25 +233,31 @@ const page = ({ params }) => {
                         d="M8 9l4-4 4 4m0 6l-4 4-4-4"
                       />
                     </svg>
+                    <div className="relative">
+                      <select
+                        className="cursor-pointer text-[22px] w-[80px] text-center appearance-none rounded-xl border border-gray-500  p-2 h-14 flex items-end pb-1"
+                        value={quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
+                      >
+                        {[1, 2, 3, 4, 5].map((qty) => (
+                          <option key={qty} value={qty}>
+                            {qty}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-
-                  <button
-                    type="button"
-                    className="h-14 px-6 py-2 font-semibold bg-[#20409a] text-white"
-                    onClick={handleAddToCart}
-                  >
-                    Add to Cart
-                  </button>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-12 mt-20 -mx-4">
+            <div className="grid grid-cols-12 mt-[250px] -mx-4">
               <div className="md:col-span-7 col-span-12 px-4">
                 <div>
-                  <h2 className=" text-[20px] font-bold mt-14">
-                    Directions for Use
-                  </h2>
+                  <p className="text-slate-900 mb-4 text-[16px]">
+                    {productData?.products.product_description}
+                  </p>
+                  <h2 className=" text-[20px] font-bold">Directions for Use</h2>
                   <ul>
                     <li>
                       1. Begin by cleaning the surface with All-purpose cleaner.

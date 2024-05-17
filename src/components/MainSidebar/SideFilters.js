@@ -9,14 +9,12 @@ const SideFilters = ({ filters, setFilters }) => {
   const handleFilterChange = (sectionId, optionValue) => {
     setFilters((prevFilters) => {
       const newFilters = { ...prevFilters };
-      const index = newFilters[sectionId]?.indexOf(optionValue) ?? -1;
       return newFilters;
     });
   };
 
   return (
     <>
-
       <div>
         <div className="py-3 px-4 bg-[#20409a]">
           <h2 className="font-medium text-white text-[16px]">
@@ -51,8 +49,6 @@ const SideFilters = ({ filters, setFilters }) => {
                       {section.map((option, optionIdx) => (
                         <div key={optionIdx} className="flex items-center">
                           <input
-                            id={`filter-${sectionId}-${optionIdx}`}
-                            name={`${sectionId}[]`}
                             value={option}
                             type="checkbox"
                             onChange={() =>
