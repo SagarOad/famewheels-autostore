@@ -15,42 +15,6 @@ const CartItem = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // const cartData = {
-  //   products: [
-  //     {
-  //       product_name: "RoadMax Interior Dressing & Protectant 500ml",
-  //       price: "1,100",
-  //       discount: "30%",
-  //       category: "Car Covers",
-  //       make: "Honda",
-  //       brand: "Asuki",
-  //       image:
-  //         "https://cache2.pakwheels.com/ad_pictures/9933/roadmax-interior-dressing-and-protectant-500ml-99330559.webp",
-  //     },
-  //     {
-  //       product_name:
-  //         "Microfiber Cloth 300 GSM Yellow and Grey 40x40 Pack of 5",
-  //       price: "1,560",
-  //       discount: "30%",
-  //       category: "Car Shampoo",
-  //       make: "Toyota",
-  //       brand: "Denso",
-  //       image:
-  //         "https://cache2.pakwheels.com/ad_pictures/9608/microfiber-cloth-300gsm-yellow-and-grey-pack-of-3-40x40-96083173.webp",
-  //     },
-  //     {
-  //       product_name: "Motor Inside MPP Multi Purpose Protectant 5 Liter",
-  //       price: "6,999",
-  //       discount: "35%",
-  //       category: "Car Poolish",
-  //       make: "Suzuki",
-  //       brand: "MK",
-  //       image:
-  //         "https://cache1.pakwheels.com/ad_pictures/9929/motor-inside-mpp-multi-purpose-protectant-5-liter-99298292.webp",
-  //     },
-  //   ],
-  // };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -65,7 +29,7 @@ const CartItem = () => {
         );
 
         SetProductCartData(response?.data.products);
-        SetProductCartImgPath(response?.data?.imagepath)
+        SetProductCartImgPath(response?.data?.imagepath);
       } catch (error) {
         setError("Error fetching data");
         console.error("Error fetching data:", error);
@@ -77,8 +41,33 @@ const CartItem = () => {
     fetchData();
   }, []);
 
+  const handleRemove = async (cart_id) => {
+    const formData = new FormData();
+    formData.append("cart_id", cart_id);
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/remove-cart-product`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZmFtZXdoZWVscy1iYWNrZW5kLnRlc3QvbG9naW4iLCJpYXQiOjE3MTU3ODIxODgsImV4cCI6MTc0NzMxODE4OCwibmJmIjoxNzE1NzgyMTg4LCJqdGkiOiJFdVFNVmVvWVpCelBVbWhmIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.AVslxMDNwytRaYWpOaCKLbNRYd3jfBYUXEvwufGdRCM`,
+          },
+        }
+      );
+      SetProductCartData((prevData) =>
+        prevData.filter((product) => product.cart_id !== cart_id)
+      );
+      toast.success("Removed Successfully");
+    } catch (error) {
+      toast.error("Error removing from cart");
+      console.error("Error removing from cart:", error);
+    }
+  };
+
   const cartData = {
     products: ProductCartData?.map((product) => ({
+      cart_id: product.cart_id,
       image: `${ProductCartImgPath}/${product.product_cover}`,
       product_name: product.product_name,
       price: product.total_amount,
@@ -95,31 +84,30 @@ const CartItem = () => {
   if (error) {
     return <div>{error}</div>;
   }
-
   return (
     <div>
-      <div class="pointer-events-none fixed inset-y-0 right-0 flex pl-10">
-        <div class="pointer-events-auto w-screen max-w-md">
-          <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-            <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
-              <div class="flex items-start justify-between">
+      <div className="pointer-events-none fixed inset-y-0 right-0 flex pl-10">
+        <div className="pointer-events-auto w-screen max-w-md">
+          <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+            <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+              <div className="flex items-start justify-between">
                 <h2
-                  class="text-lg font-medium text-gray-900"
+                  className="text-lg font-medium text-gray-900"
                   id="slide-over-title"
                 >
                   Shopping cart
                 </h2>
               </div>
 
-              <div class="mt-8">
-                <div class="flow-root">
-                  <ul role="list" class="-my-6 divide-y divide-gray-200">
-                    {cartData.products.map((product, index) => (
+              <div className="mt-8">
+                <div className="flow-root">
+                  <ul role="list" className="-my-6 divide-y divide-gray-200">
+                    {cartData?.products?.map((product, index) => (
                       <li key={index} className="flex py-6">
                         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                           <img
                             src={product.image}
-                            alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
+                            alt="Product image"
                             className="h-full w-full object-cover object-center"
                           />
                         </div>
@@ -135,13 +123,14 @@ const CartItem = () => {
                           </div>
                           <div className="flex flex-1 items-end justify-between text-sm">
                             <p className="text-gray-500">
-                              Qty 1 {product.quantity}
+                              Qty {product.quantity}
                             </p>
 
                             <div className="flex">
                               <button
                                 type="button"
                                 className="font-medium text-indigo-600 hover:text-indigo-500"
+                                onClick={() => handleRemove(product.cart_id)}
                               >
                                 Remove
                               </button>
@@ -155,28 +144,28 @@ const CartItem = () => {
               </div>
             </div>
 
-            <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
-              <div class="flex justify-between text-base font-medium text-gray-900">
+            <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+              <div className="flex justify-between text-base font-medium text-gray-900">
                 <p>Subtotal</p>
                 <p>PKR 1132</p>
               </div>
-              <p class="mt-0.5 text-sm text-gray-500">
+              <p className="mt-0.5 text-sm text-gray-500">
                 Shipping and taxes calculated at checkout.
               </p>
-              <div class="mt-6">
+              <div className="mt-6">
                 <Link
                   href="/Checkout"
-                  class="flex items-center justify-center rounded-md border border-transparent bg-[#20409a] px-6 py-3 text-base font-medium text-white shadow-sm"
+                  className="flex items-center justify-center rounded-md border border-transparent bg-[#20409a] px-6 py-3 text-base font-medium text-white shadow-sm"
                 >
                   Checkout
                 </Link>
               </div>
-              <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
+              <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                 <p>
                   or
                   <button
                     type="button"
-                    class="font-medium text-indigo-600 hover:text-indigo-500"
+                    className="font-medium text-indigo-600 hover:text-indigo-500"
                   >
                     Continue Shopping
                     <span aria-hidden="true"> &rarr;</span>

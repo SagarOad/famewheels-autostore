@@ -2,8 +2,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ToastContainer } from "react-toastify";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
+import TokenHandler from "@/components/TokenHandler";
+// import MainProvider from "@/NoSSRProvider/MainProvider";
+// import Nossr from "@/NoSSRProvider/Nossr";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,12 +16,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning={true}>
         <ToastContainer />
         <div className="max-w-[1600px] mx-auto">
           <Navbar />
+          <TokenHandler />
           {children}
         </div>
+        {/* </MainProvider>
+        </Nossr> */}
       </body>
     </html>
   );
