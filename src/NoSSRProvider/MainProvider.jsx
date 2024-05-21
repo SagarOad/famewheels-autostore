@@ -1,11 +1,12 @@
 "use client";
-import { UserContext } from "@/context/UserContext";
+import { store } from "@/app/store/store";
 import React from "react";
-
+import { Provider } from "react-redux";
+// import { store } from "@/app/store/store";
 
 const MainProvider = ({ children }) => {
   return (
-      <>{children}</>
+      <Provider store={store}>{children}</Provider>
   );
 };
 

@@ -1,8 +1,25 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import CartItem from "./CartItem";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { setUser } from "@/app/store/userSlice";
 
 const Navbar = () => {
+  const dispatchUser = useDispatch();
+  
+
+const [userData, setUserData]=useState()
+  useEffect(() => {
+const useData = JSON.parse(Cookies.get("userData"))
+if(useData){
+
+  dispatchUser(setUser(useData));
+  setUserData(useData)
+}  
+  },[])
+
   return (
     <div>
       <nav class="bg-white border-gray-200 ">
@@ -14,6 +31,7 @@ const Navbar = () => {
               alt="Famewheels logo"
             />
           </a>
+          <h2>{userData?.name}</h2>
           <button
             data-collapse-toggle="navbar-dropdown"
             type="button"
