@@ -4,6 +4,13 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+
 const LogIn = () => {
   const dispatchUser = useDispatch();
   const [email, setEmail] = useState("");
@@ -68,8 +75,8 @@ const LogIn = () => {
 
     const formData = new FormData();
     formData.append("login_type", "phone");
-    formData.append("phone", phoneNumber);
-    formData.append("otp", otp);
+    formData.append("email", phoneNumber);
+    formData.append("password", otp);
 
     try {
       const response = await axios.post(
@@ -116,14 +123,15 @@ const LogIn = () => {
     setOtpSent(false); // Reset OTP sent status
   };
 
+  const handleOtpChange = (otp) => {
+    setOtp(otp);
+  };
+  
   return (
     <section className="bg-gray-50">
       <div className="flex flex-col items-center justify-center mx-auto lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-2">
-            <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl">
-              Login
-            </h1>
             <form
               className="space-y-4 md:space-y-6"
               onSubmit={
@@ -137,6 +145,9 @@ const LogIn = () => {
               {!showPhoneLogin && (
                 <>
                   <div>
+                    <h1 className="text-xl font-bold mb-8 leading-tight tracking-tight md:text-2xl">
+                      Login
+                    </h1>
                     <label
                       htmlFor="email"
                       className="block mb-2 text-sm font-medium"
@@ -176,12 +187,16 @@ const LogIn = () => {
               )}
               {showPhoneLogin && !otpSent && (
                 <div>
+                  <h1 className="text-xl font-bold mb-8 leading-tight tracking-tight md:text-2xl">
+                    Login
+                  </h1>
                   <label
                     htmlFor="phone"
                     className="block mb-2 text-sm font-medium"
                   >
                     Phone Number
                   </label>
+
                   <input
                     type="text"
                     name="phone"
@@ -195,14 +210,15 @@ const LogIn = () => {
                 </div>
               )}
               {otpSent && (
-                <div>
-                  <label
-                    htmlFor="otp"
-                    className="block mb-2 text-sm font-medium"
-                  >
-                    OTP
-                  </label>
-                  <input
+                <div className=" flex justify-center items-center">
+                  <div>
+                    <label
+                      htmlFor="otp"
+                      className="block mb-2 text-center text-[1.4rem] font-medium"
+                    >
+                      Enter OTP
+                    </label>
+                    {/* <input
                     type="text"
                     name="otp"
                     id="otp"
@@ -211,7 +227,25 @@ const LogIn = () => {
                     required
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
-                  />
+                  /> */}
+                    <InputOTP
+                      maxLength={6}
+                      value={otp}
+                      onChange={handleOtpChange}
+                    >
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                      </InputOTPGroup>
+                      <InputOTPSeparator />
+                      <InputOTPGroup>
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </div>
                 </div>
               )}
               <button
