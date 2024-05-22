@@ -2,32 +2,48 @@
 import React, { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import CartItem from "./CartItem";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
-import { setUser } from "@/app/store/userSlice";
+import { setUser, clearUser } from "@/app/store/userSlice";
+import { logout } from "./Auth/Logout";
+import AuthModal from "./Auth/AuthModal";
 
 const Navbar = () => {
   const dispatchUser = useDispatch();
-  
+  const [userData, setUserData] = useState();
+  const [open, setOpen] = useState(false);
 
-const [userData, setUserData]=useState()
   useEffect(() => {
-const useData = JSON.parse(Cookies.get("userData"))
-if(useData){
+    const userDataCookie = Cookies.get("userData");
+    if (userDataCookie) {
+      try {
+        const parsedUserData = JSON.parse(userDataCookie);
+        dispatchUser(setUser(parsedUserData));
+        setUserData(parsedUserData);
+      } catch (error) {
+        console.error("Failed to parse userData cookie:", error);
+      }
+    }
+  }, [dispatchUser]);
 
-  dispatchUser(setUser(useData));
-  setUserData(useData)
-}  
-  },[])
+  const handleLogout = () => {
+    logout(dispatchUser);
+    setUserData(null);
+    console.log("Reload test");
+    window.location.reload();
+  };
 
   return (
     <div>
-      <nav class="bg-white border-gray-200 ">
-        <div class="max-w-[1600px] px-4 flex flex-wrap py-8 items-center justify-between mx-auto">
-          <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+      <nav className="bg-white border-gray-200">
+        <div className="max-w-[1600px] px-4 flex flex-wrap py-8 items-center justify-between mx-auto">
+          <a
+            href="#"
+            className="flex items-center space-x-3 rtl:space-x-reverse"
+          >
             <img
               src="https://www.famewheels.com/static/media/fame-wheels-logo.bdbcd17588780f149f99.png"
-              class="h-10"
+              className="h-10"
               alt="Famewheels logo"
             />
           </a>
@@ -35,13 +51,13 @@ if(useData){
           <button
             data-collapse-toggle="navbar-dropdown"
             type="button"
-            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200   "
+            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
             aria-controls="navbar-dropdown"
             aria-expanded="false"
           >
-            <span class="sr-only">Open main menu</span>
+            <span className="sr-only">Open main menu</span>
             <svg
-              class="w-5 h-5"
+              className="w-5 h-5"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -49,19 +65,22 @@ if(useData){
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M1 1h15M1 7h15M1 13h15"
               />
             </svg>
           </button>
-          <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
-            <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white  md: ">
+          <div
+            className="hidden w-full md:block md:w-auto"
+            id="navbar-dropdown"
+          >
+            <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
               <li>
                 <Sheet>
                   <SheetTrigger asChild>
-                    <button variant="outline">
+                    <button className="">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -83,6 +102,20 @@ if(useData){
                   </SheetContent>
                 </Sheet>
               </li>
+              {userData ? (
+                <li className="flex justify-center items-center text-[20px]">
+                  <button onClick={handleLogout} className="">
+                    Log out
+                  </button>
+                </li>
+              ) : (
+                <li className="flex justify-center items-center text-[20px]">
+                  <button onClick={() => setOpen(true)} className="">
+                    Log in
+                  </button>
+                </li>
+              )}
+              <AuthModal isOpen={open} onClose={()=>setOpen(false)}/>
             </ul>
           </div>
         </div>

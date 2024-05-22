@@ -9,6 +9,7 @@ import loader from "../../../assets/timer.gif";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
@@ -17,6 +18,18 @@ const page = ({ params }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
+
+  const [userData, setUserData] = useState("");
+
+  const allUserData = Cookies.get("userData");
+  const cartToken = Cookies.get("user_token");
+
+  if (allUserData) {
+    setUserData(JSON.parse(allUserData));
+  }
+
+
+  console.log(userData, "Data token test");
 
   const images = [
     {
@@ -61,6 +74,9 @@ const page = ({ params }) => {
   const handleAddToCart = async () => {
     const formData = new FormData();
 
+    const UserToken = localStorage.getItem("token");
+
+
     formData.append("product_id", params.slug);
     formData.append("product_name", productData?.products.product_title);
     formData.append("product_quantity", quantity);
@@ -68,6 +84,8 @@ const page = ({ params }) => {
       "product_price",
       productData?.products.product_actual_price
     );
+
+    formData.append("user_id", UserToken ? userData?.id : cartToken);
 
     try {
       const response = await axios.post(`${BASE_URL}/add-to-cart`, formData, {
@@ -162,7 +180,10 @@ const page = ({ params }) => {
                 <div x-data="{ image: 1 }" x-cloak>
                   <div className="h-64 md:h-80 rounded-lg bg-gray-100 mb-4">
                     <div className=" discount"></div>
-                    <ProductImageSlide discountPercentage={discountPercentage} images={images} />
+                    <ProductImageSlide
+                      discountPercentage={discountPercentage}
+                      images={images}
+                    />
                   </div>
 
                   <div className="flex -mx-2 mb-4"></div>

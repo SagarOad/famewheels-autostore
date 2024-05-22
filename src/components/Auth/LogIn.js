@@ -37,6 +37,7 @@ const LogIn = () => {
         toast.success("Login Successful");
 
         await getUserData(response.data.token);
+        // window.location.reload();
       } else {
         toast.error("Error in Login: No token received");
       }
@@ -107,10 +108,10 @@ const LogIn = () => {
           },
         }
       );
+      Cookies.set("userData", JSON.stringify(response?.data));
       dispatchUser(setUser(response?.data));
-      const userData = response.data;
+      const userData = response?.data;
       setUser(userData);
-      Cookies.set("userData", JSON.stringify(userData));
       toast.success("User data fetched successfully");
     } catch (error) {
       toast.error("Error fetching user data");
@@ -126,7 +127,7 @@ const LogIn = () => {
   const handleOtpChange = (otp) => {
     setOtp(otp);
   };
-  
+
   return (
     <section className="bg-gray-50">
       <div className="flex flex-col items-center justify-center mx-auto lg:py-0">

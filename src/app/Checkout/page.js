@@ -1,20 +1,24 @@
-"use client"
+"use client";
 
 import OrderSummary from '@/components/OrderSummary'
-import React from "react";
+import React, { useState } from "react";
 import AuthModal from "@/components/Auth/AuthModal"
 import { useSelector } from 'react-redux';
 
-const page = () => {
-const user = useSelector((state) => state.user);
+const Page = () => {
+  const user = useSelector((state) => state.user);
+  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+
+  const openAuthModal = () => setAuthModalOpen(true);
+  const closeAuthModal = () => setAuthModalOpen(false);
 
   return (
     <div>
       {user?.name}
-        <OrderSummary />
-        <AuthModal />
+      <OrderSummary openAuthModal={openAuthModal} />
+      <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
     </div>
-  )
+  );
 }
 
-export default page
+export default Page;

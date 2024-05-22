@@ -14,20 +14,15 @@ import { Button } from "@/components/ui/button";
 import LoginIn from "./LogIn";
 import SignUp from "./SignUp";
 
-const AuthModal = () => {
+const AuthModal = ({ isOpen, onClose }) => {
   return (
-    <div>
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button variant="outline">Show Dialog</Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <LoginIn />
-          {/* <SignUp /> */}
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+    <AlertDialog open={isOpen} onOpenChange={onClose}>
+      <AlertDialogContent>
+        <LoginIn />
+        {/* <SignUp /> */}
+        <AlertDialogCancel onClick={onClose}>Cancel</AlertDialogCancel>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 
