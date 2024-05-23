@@ -48,7 +48,7 @@ const LogIn = () => {
         toast.success("Login Successful");
 
         await getUserData(response.data.token);
-        // window.location.reload();
+        window.location.reload();
       } else {
         toast.error("Error in Login: No token received");
       }
