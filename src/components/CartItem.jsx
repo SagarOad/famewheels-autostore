@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductCard from "./ProductCard/ProductCard";
+import Cookies from "js-cookie";
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
@@ -14,19 +15,36 @@ const CartItem = () => {
   const [ProductCartImgPath, SetProductCartImgPath] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userData, setUserData] = useState("");
+
+  const allUserData = Cookies.get("userData");
+  const cartToken = Cookies.get("user_token");
+
+  useEffect(() => {
+    if (allUserData) {
+      setUserData(JSON.parse(allUserData));
+    }
+    console.log(userData, "Data token test");
+  }, [allUserData]);
 
   useEffect(() => {
     const fetchData = async () => {
+      const UserToken = localStorage.getItem("token");
+      const userId = UserToken ? userData?.id : cartToken;
+
+      if (!userId) {
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await axios.get(`${BASE_URL}/view-cart`, {
+          params: { user_id: userId },
           headers: {
-            Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZmFtZXdoZWVscy1iYWNrZW5kLnRlc3QvbG9naW4iLCJpYXQiOjE3MTU3ODIxODgsImV4cCI6MTc0NzMxODE4OCwibmJmIjoxNzE1NzgyMTg4LCJqdGkiOiJFdVFNVmVvWVpCelBVbWhmIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.AVslxMDNwytRaYWpOaCKLbNRYd3jfBYUXEvwufGdRCM`,
+            Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZmFtZXdoZWVscy1iYWNrZW5kLnRlc3QvbG9naW4iLCJpYXQiOjE3MTU3ODIxODgsImV4cCI6MTc0NzMxODE4OCwibmJmIjoxNzE1NzgyMTg4LCJqdGkiOiJFdVFNVmVvWVpCelBVbWhmIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.AVslxMDNwytRaYWpOaCKLbNRYd3jfBYUXEvwufGdRCM`, // Replace with your actual token
           },
         });
-        console.log(
-          response?.data.products,
-          "Product data fetched successfully"
-        );
+        console.log(response?.data.products, "Product data fetched successfully");
 
         SetProductCartData(response?.data.products);
         SetProductCartImgPath(response?.data?.imagepath);
@@ -38,8 +56,10 @@ const CartItem = () => {
       }
     };
 
-    fetchData();
-  }, []);
+    if (userData || cartToken) {
+      fetchData();
+    }
+  }, [userData, cartToken]); 
 
   const handleRemove = async (cart_id) => {
     const formData = new FormData();

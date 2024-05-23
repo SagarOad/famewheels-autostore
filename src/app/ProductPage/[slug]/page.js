@@ -24,12 +24,12 @@ const page = ({ params }) => {
   const allUserData = Cookies.get("userData");
   const cartToken = Cookies.get("user_token");
 
-  if (allUserData) {
-    setUserData(JSON.parse(allUserData));
-  }
-
-
-  console.log(userData, "Data token test");
+  useEffect(() => {
+    if (allUserData) {
+      setUserData(JSON.parse(allUserData));
+    }
+    console.log(userData, "Data token test");
+  }, []);
 
   const images = [
     {
@@ -75,7 +75,6 @@ const page = ({ params }) => {
     const formData = new FormData();
 
     const UserToken = localStorage.getItem("token");
-
 
     formData.append("product_id", params.slug);
     formData.append("product_name", productData?.products.product_title);

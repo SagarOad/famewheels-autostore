@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
-
+import { setUser } from "@/app/store/userSlice";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+
+const BASE_URL = "https://portal.famewheels.com";
 
 const LogIn = () => {
   const dispatchUser = useDispatch();
@@ -19,6 +22,17 @@ const LogIn = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
+  const [userData, setUserData] = useState(null); // Initialize with null
+
+  const allUserData = Cookies.get("userData");
+  const cartToken = Cookies.get("user_token");
+
+  useEffect(() => {
+    if (allUserData) {
+      setUserData(JSON.parse(allUserData));
+    }
+    console.log(userData, "Data token test");
+  }, [allUserData]);
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
@@ -28,10 +42,7 @@ const LogIn = () => {
     formData.append("password", password);
 
     try {
-      const response = await axios.post(
-        `https://portal.famewheels.com/login`,
-        formData
-      );
+      const response = await axios.post(`${BASE_URL}/login`, formData);
       if (response.data && response.data.token) {
         localStorage.setItem("token", response.data.token);
         toast.success("Login Successful");
@@ -55,10 +66,7 @@ const LogIn = () => {
     formData.append("phone", phoneNumber);
 
     try {
-      const response = await axios.post(
-        `https://portal.famewheels.com/sendotp`,
-        formData
-      );
+      const response = await axios.post(`${BASE_URL}/sendotp`, formData);
       if (response.data) {
         toast.success("OTP sent to your phone");
         setOtpSent(true);
@@ -80,10 +88,7 @@ const LogIn = () => {
     formData.append("password", otp);
 
     try {
-      const response = await axios.post(
-        `https://portal.famewheels.com/login`,
-        formData
-      );
+      const response = await axios.post(`${BASE_URL}/login`, formData);
       if (response.data && response.data.token) {
         localStorage.setItem("token", response.data.token);
         toast.success("Login Successful");
@@ -100,18 +105,15 @@ const LogIn = () => {
 
   const getUserData = async (token) => {
     try {
-      const response = await axios.get(
-        `https://portal.famewheels.com/getUser`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      Cookies.set("userData", JSON.stringify(response?.data));
-      dispatchUser(setUser(response?.data));
+      const response = await axios.get(`${BASE_URL}/getUser`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const userData = response?.data;
-      setUser(userData);
+      Cookies.set("userData", JSON.stringify(userData));
+      dispatchUser(setUser(userData));
+      setUserData(userData);
       toast.success("User data fetched successfully");
     } catch (error) {
       toast.error("Error fetching user data");
@@ -127,6 +129,34 @@ const LogIn = () => {
   const handleOtpChange = (otp) => {
     setOtp(otp);
   };
+
+  useEffect(() => {
+    const updateUserCart = async () => {
+      if (userData && cartToken) {
+        console.log("Updating user cart with:", {
+          user_id: userData.id,
+          cart_token: cartToken,
+        });
+
+        const formData = new FormData();
+        formData.append("user_id", userData.id);
+        formData.append("cart_token", cartToken);
+
+        try {
+          const response = await axios.post(`http://192.168.18.244:8000/update-user-cart`, formData, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+          console.log("Cart updated successfully:", response.data);
+        } catch (error) {
+          console.error("Error updating cart:", error);
+        }
+      }
+    };
+
+    updateUserCart();
+  }, [userData, cartToken]);
 
   return (
     <section className="bg-gray-50">
@@ -219,16 +249,6 @@ const LogIn = () => {
                     >
                       Enter OTP
                     </label>
-                    {/* <input
-                    type="text"
-                    name="otp"
-                    id="otp"
-                    className="darkbg-gray-50 border border-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-4"
-                    placeholder="Enter OTP"
-                    required
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                  /> */}
                     <InputOTP
                       maxLength={6}
                       value={otp}
