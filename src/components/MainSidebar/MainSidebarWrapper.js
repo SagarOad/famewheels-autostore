@@ -1,10 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchBox from "../SearchBox/SearchBox";
 import MainSidebar from "./MainSidebar";
+import axios from "axios";
+const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 const MainSidebarWrapper = () => {
   const [viewMode, setViewMode] = useState("grid");
+
+
   const categories = [
     {
       category_id: 5,
@@ -51,6 +55,8 @@ const MainSidebarWrapper = () => {
       subcategories: []
     }
   ];
+
+  
 
   const [searchQuery, setSearchQuery] = useState("");
 

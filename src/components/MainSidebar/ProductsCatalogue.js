@@ -21,11 +21,15 @@ const ProductsCatalogue = ({
     let timeoutId;
     const fetchData = async () => {
       try {
+        // Convert subcategories array to subcategories[] format
+        const params = new URLSearchParams();
+        subcategories.forEach(subcategory => params.append('subcategories[]', subcategory));
+        if (searchQuery) {
+          params.append('searchQuery', searchQuery);
+        }
+
         const response = await axios.get(`${BASE_URL}/product-list-public`, {
-          params: {
-            subcategories: subcategories.join(","),
-            searchQuery,
-          },
+          params
         });
         setProductsData(response.data);
         clearTimeout(timeoutId);
@@ -43,6 +47,7 @@ const ProductsCatalogue = ({
 
     return () => clearTimeout(timeoutId);
   }, [subcategories, searchQuery]);
+
   if (error) {
     return (
       <div className="h-[100%] w-full flex justify-center items-center">

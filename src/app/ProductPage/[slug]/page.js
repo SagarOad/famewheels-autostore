@@ -245,7 +245,7 @@ const page = ({ params }) => {
                 <div className="flex py-4 space-x-4">
                   <button
                     type="button"
-                    className="px-20 text-[24px] font-semibold bg-[#20409a] text-white"
+                    className="px-20 text-[21px] font-semibold bg-[#20409a] text-white"
                     onClick={handleAddToCart}
                   >
                     Add to Cart
@@ -274,7 +274,7 @@ const page = ({ params }) => {
                           -
                         </button>
                         <select
-                          className="cursor-pointer text-[22px] w-[80px] text-center appearance-none rounded-xl border border-gray-500 p-2 h-14 flex items-end pb-1"
+                          className="cursor-pointer text-[22px] pb-[8px] w-[80px] text-center appearance-none rounded-xl border border-gray-500 p-2 h-14 flex items-end"
                           value={quantity}
                           onChange={(e) =>
                             setQuantity(parseInt(e.target.value))
