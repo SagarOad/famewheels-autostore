@@ -5,7 +5,7 @@ import CartItem from "./CartItem";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import { setUser, clearUser } from "@/app/store/userSlice";
-import { logout } from "./Auth/Logout";
+import { logout } from "./Auth/logout";
 import AuthModal from "./Auth/AuthModal";
 import {
   Menubar,
