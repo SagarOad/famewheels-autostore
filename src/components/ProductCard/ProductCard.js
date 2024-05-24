@@ -1,10 +1,56 @@
-import React from "react";
+"use client"
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import defaultImage from "../../assets/bugatti.png";
 import Image from "next/image";
+import Cookies from "js-cookie";
 
+
+const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 const ProductCard = ({ product, viewMode, addToCart }) => {
+
+  const [userData, setUserData] = useState("");
+
+  const allUserData = Cookies.get("userData");
+  const cartToken = Cookies.get("user_token");
+
+  useEffect(() => {
+    if (allUserData) {
+      setUserData(JSON.parse(allUserData));
+    }
+    console.log(userData, "Data token test");
+  }, []);
+
+  const handleAddToCart = async () => {
+    const formData = new FormData();
+
+    const UserToken = localStorage.getItem("token");
+
+    // formData.append("product_id", params.slug);
+    formData.append("product_name", productData?.products.product_title);
+    formData.append("product_quantity", quantity);
+    formData.append(
+      "product_price",
+      productData?.products.product_actual_price
+    );
+
+    formData.append("user_id", UserToken ? userData?.id : cartToken);
+
+    try {
+      const response = await axios.post(`${BASE_URL}/add-to-cart`, formData, {
+        headers: {
+          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZmFtZXdoZWVscy1iYWNrZW5kLnRlc3QvbG9naW4iLCJpYXQiOjE3MTU3ODIxODgsImV4cCI6MTc0NzMxODE4OCwibmJmIjoxNzE1NzgyMTg4LCJqdGkiOiJFdVFNVmVvWVpCelBVbWhmIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.AVslxMDNwytRaYWpOaCKLbNRYd3jfBYUXEvwufGdRCM`,
+        },
+      });
+      console.log("Added to cart:", response.data);
+    } catch (error) {
+      toast.error("Error adding to cart");
+      console.error("Error adding to cart:", error);
+    }
+
+    toast.success("Added to cart successfully");
+  };
   return (
     <>
       {viewMode === "grid" ? (
@@ -48,7 +94,7 @@ const ProductCard = ({ product, viewMode, addToCart }) => {
               </span>
             </a>
             <div className="mt-4 px-4 pb-5">
-              <Link href={`/ProductPage/${product.product_id}`}>
+              <Link href={`/ProductPage/${product.product_slug}`}>
                 <h5 className="text-[16px] font-bold tracking-tight text-[#20409a]">
                   {product.product_title}
                 </h5>
@@ -63,9 +109,9 @@ const ProductCard = ({ product, viewMode, addToCart }) => {
               <button className="flex items-center justify-center w-full border-2 mb-2 border-[#b80505] rounded-md bg-text bg-white px-5 py-2 text-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300">
                 Buy Now
               </button>
-              <a
-                className="flex items-center justify-center rounded-md bg-[#b80505] px-5 py-2 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
-                onClick={() => addToCart(product)}
+              <button
+                className="flex items-center w-full justify-center rounded-md bg-[#b80505] px-5 py-2 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                onClick={handleAddToCart}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +128,7 @@ const ProductCard = ({ product, viewMode, addToCart }) => {
                   />
                 </svg>
                 Add to cart
-              </a>
+              </button>
             </div>
           </div>
         </div>

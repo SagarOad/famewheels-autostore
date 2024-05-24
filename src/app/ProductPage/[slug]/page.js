@@ -57,7 +57,7 @@ const page = ({ params }) => {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          `${BASE_URL}/product-detail/?product_id=${params.slug}`
+          `${BASE_URL}/product-detail/?product_slug=${params.slug}`
         );
         setProductData(response.data);
       } catch (error) {

@@ -8,7 +8,12 @@ import Image from "next/image";
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
-const ProductsCatalogue = ({ viewMode, addToCart, filters, searchQuery }) => {
+const ProductsCatalogue = ({
+  viewMode,
+  addToCart,
+  subcategories,
+  searchQuery,
+}) => {
   const [productsData, setProductsData] = useState(null);
   const [error, setError] = useState(false);
 
@@ -17,7 +22,10 @@ const ProductsCatalogue = ({ viewMode, addToCart, filters, searchQuery }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/product-list-public`, {
-          params: { ...filters, searchQuery },
+          params: {
+            subcategories: subcategories.join(","),
+            searchQuery,
+          },
         });
         setProductsData(response.data);
         clearTimeout(timeoutId);
@@ -27,17 +35,14 @@ const ProductsCatalogue = ({ viewMode, addToCart, filters, searchQuery }) => {
       }
     };
 
-    // Set a timeout to show an error message after 5 seconds
     timeoutId = setTimeout(() => {
       setError(true);
     }, 5000);
 
     fetchData();
 
-    // Cleanup function to clear the timeout if the component unmounts
     return () => clearTimeout(timeoutId);
-  }, [filters, searchQuery]);
-
+  }, [subcategories, searchQuery]);
   if (error) {
     return (
       <div className="h-[100%] w-full flex justify-center items-center">
