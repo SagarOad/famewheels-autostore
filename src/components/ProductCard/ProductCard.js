@@ -1,15 +1,15 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import defaultImage from "../../assets/bugatti.png";
 import Image from "next/image";
 import Cookies from "js-cookie";
-
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
 const ProductCard = ({ product, viewMode, addToCart }) => {
-
   const [userData, setUserData] = useState("");
 
   const allUserData = Cookies.get("userData");
@@ -27,13 +27,10 @@ const ProductCard = ({ product, viewMode, addToCart }) => {
 
     const UserToken = localStorage.getItem("token");
 
-    // formData.append("product_id", params.slug);
-    formData.append("product_name", productData?.products.product_title);
-    formData.append("product_quantity", quantity);
-    formData.append(
-      "product_price",
-      productData?.products.product_actual_price
-    );
+    formData.append("product_id", product.product_id);
+    formData.append("product_name", product.product_title);
+    formData.append("product_quantity", 1);
+    formData.append("product_price", product.product_actual_price);
 
     formData.append("user_id", UserToken ? userData?.id : cartToken);
 

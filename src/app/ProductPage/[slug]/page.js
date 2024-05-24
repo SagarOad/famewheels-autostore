@@ -31,6 +31,18 @@ const page = ({ params }) => {
     console.log(userData, "Data token test");
   }, []);
 
+  const increaseQuantity = () => {
+    if (quantity < 5) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
   const images = [
     {
       original:
@@ -76,7 +88,7 @@ const page = ({ params }) => {
 
     const UserToken = localStorage.getItem("token");
 
-    formData.append("product_id", params.slug);
+    formData.append("product_id", productData?.products.product_id);
     formData.append("product_name", productData?.products.product_title);
     formData.append("product_quantity", quantity);
     formData.append(
@@ -253,18 +265,34 @@ const page = ({ params }) => {
                         d="M8 9l4-4 4 4m0 6l-4 4-4-4"
                       />
                     </svg>
-                    <div className="relative">
-                      <select
-                        className="cursor-pointer text-[22px] w-[80px] text-center appearance-none rounded-xl border border-gray-500  p-2 h-14 flex items-end pb-1"
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                      >
-                        {[1, 2, 3, 4, 5].map((qty) => (
-                          <option key={qty} value={qty}>
-                            {qty}
-                          </option>
-                        ))}
-                      </select>
+                    <div className=" relative">
+                      <div className="flex items-center space-x-2">
+                        <button
+                          className="cursor-pointer text-[22px] w-[40px] text-center rounded-xl border border-gray-500 p-2 h-14 flex items-center justify-center"
+                          onClick={decreaseQuantity}
+                        >
+                          -
+                        </button>
+                        <select
+                          className="cursor-pointer text-[22px] w-[80px] text-center appearance-none rounded-xl border border-gray-500 p-2 h-14 flex items-end pb-1"
+                          value={quantity}
+                          onChange={(e) =>
+                            setQuantity(parseInt(e.target.value))
+                          }
+                        >
+                          {[1, 2, 3, 4, 5].map((qty) => (
+                            <option key={qty} value={qty}>
+                              {qty}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          className="cursor-pointer text-[22px] w-[40px] text-center rounded-xl border border-gray-500 p-2 h-14 flex items-center justify-center"
+                          onClick={increaseQuantity}
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
