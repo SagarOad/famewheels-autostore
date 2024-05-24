@@ -11,27 +11,28 @@ const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 const ProductsCatalogue = ({
   viewMode,
   addToCart,
+  brands,
   subcategories,
   searchQuery,
 }) => {
-  const [productsData, setProductsData] = useState(null);
+  const [productsData, setProductsData] = useState([]);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     let timeoutId;
     const fetchData = async () => {
       try {
-        // Convert subcategories array to subcategories[] format
+        // Manually construct the payload
         const params = new URLSearchParams();
-        subcategories.forEach(subcategory => params.append('subcategories[]', subcategory));
+        subcategories.forEach(subcategory => params.append('subcategory_name[]', subcategory));
+        brands.forEach(brand => params.append('brands[]', brand));
         if (searchQuery) {
-          params.append('searchQuery', searchQuery);
+          params.append('product_name', searchQuery);
         }
 
-        const response = await axios.get(`${BASE_URL}/product-list-public`, {
-          params
-        });
-        setProductsData(response.data);
+        const response = await axios.post(`${BASE_URL}/product-filter`, params);
+        setProductsData(response?.data?.posts?.data);
+        console.log(response?.data?.posts?.data, "prrrrrrrrrrrrroooooooooooo");
         clearTimeout(timeoutId);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -46,20 +47,20 @@ const ProductsCatalogue = ({
     fetchData();
 
     return () => clearTimeout(timeoutId);
-  }, [subcategories, searchQuery]);
+  }, [subcategories, brands, searchQuery]);
 
   if (error) {
     return (
       <div className="h-[100%] w-full flex justify-center items-center">
         <div>
-          <Image className=" w-[150px] mx-auto mt-6" src={somethingWrong} />
-          <h2 className=" font-bold text-[22px]">Something went wrong!!</h2>
+          <Image className="w-[150px] mx-auto mt-6" src={somethingWrong} alt="Something went wrong" />
+          <h2 className="font-bold text-[22px]">Something went wrong!!</h2>
         </div>
       </div>
     );
   }
 
-  if (!productsData) {
+  if (!productsData.length) {
     return (
       <div className="h-[100%] w-full flex justify-center items-center">
         {/* Loading animation */}
@@ -72,7 +73,7 @@ const ProductsCatalogue = ({
     <>
       {viewMode === "grid" ? (
         <div className="flex flex-wrap">
-          {productsData.products?.map((product, index) => (
+          {productsData.map((product, index) => (
             <div key={index} className="m-2">
               <ProductCard
                 product={product}
@@ -84,7 +85,7 @@ const ProductsCatalogue = ({
         </div>
       ) : (
         <div>
-          {productsData.products?.map((product, index) => (
+          {productsData.map((product, index) => (
             <div key={index} className="m-2">
               <ProductCard
                 product={product}

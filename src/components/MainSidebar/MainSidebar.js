@@ -3,17 +3,19 @@ import { useState } from "react";
 import ProductsCatalogue from "./ProductsCatalogue";
 import SideFilters from "./SideFilters";
 
-export default function MainSidebar({ viewMode, categories, searchQuery }) {
+export default function MainSidebar({ viewMode, categories, brands, searchQuery }) {
   const [cartItems, setCartItems] = useState([]);
   const [selectedSubcategories, setSelectedSubcategories] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
 
   const addToCart = (product) => {
     setCartItems([...cartItems, product]);
     console.log("Product added to cart");
   };
 
-  const handleFilterChange = (subcategories) => {
+  const handleFilterChange = (subcategories, brands) => {
     setSelectedSubcategories(subcategories);
+    setSelectedBrands(brands);
   };
 
   return (
@@ -26,13 +28,18 @@ export default function MainSidebar({ viewMode, categories, searchQuery }) {
 
           <div className="grid grid-cols-10">
             <div className="md:col-span-2">
-              <SideFilters categories={categories} onFilterChange={handleFilterChange} />
+              <SideFilters
+                categories={categories}
+                brands={brands}
+                onFilterChange={handleFilterChange}
+              />
             </div>
             <div className="md:col-span-8 pl-12">
               <ProductsCatalogue
                 viewMode={viewMode}
                 addToCart={addToCart}
                 subcategories={selectedSubcategories}
+                brands={selectedBrands}
                 searchQuery={searchQuery}
               />
             </div>

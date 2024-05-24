@@ -143,7 +143,7 @@ const LogIn = () => {
         formData.append("cart_token", cartToken);
 
         try {
-          const response = await axios.post(`http://192.168.18.244:8000/update-user-cart`, formData, {
+          const response = await axios.post(`https://portal.famewheels.com/update-user-cart`, formData, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },

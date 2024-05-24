@@ -10,13 +10,8 @@ import AuthModal from "./Auth/AuthModal";
 import {
   Menubar,
   MenubarContent,
-  MenubarItem,
   MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
   MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
 
@@ -37,6 +32,7 @@ const Navbar = () => {
       }
     }
   }, [dispatchUser]);
+
 
   const handleLogout = () => {
     logout(dispatchUser);
