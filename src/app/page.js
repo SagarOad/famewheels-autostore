@@ -8,9 +8,11 @@ export default function Home() {
       {" "}
       <div className=" bg-[#ffffff]">
         <main>
-          <MainBanner />
-          <MainSidebarWrapper />
-          <ProductCart />
+          <div className=" max-w-[1600px] mx-auto">
+            <MainBanner />
+            <MainSidebarWrapper />
+            <ProductCart />
+          </div>
         </main>
       </div>
     </>

@@ -1,38 +1,53 @@
-import React, { Fragment, useState, useEffect } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 
-const SideFilters = ({ categories, onFilterChange, brands }) => {
+const SideFilters = ({
+  categories,
+  onFilterChange,
+  brands,
+  selectedSubcategories,
+  selectedBrands,
+}) => {
   const [openCategory, setOpenCategory] = useState(null);
-  const [selectedSubcategories, setSelectedSubcategories] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [localSelectedSubcategories, setLocalSelectedSubcategories] = useState(
+    selectedSubcategories
+  );
+  const [localSelectedBrands, setLocalSelectedBrands] =
+    useState(selectedBrands);
 
   const toggleCategory = (categoryId) => {
     setOpenCategory(openCategory === categoryId ? null : categoryId);
   };
 
   const handleSubcategoryChange = (subcategoryId) => {
-    setSelectedSubcategories((prevSubcategories) => {
-      return prevSubcategories.includes(subcategoryId)
+    setLocalSelectedSubcategories((prevSubcategories) => {
+      const updatedSubcategories = prevSubcategories.includes(subcategoryId)
         ? prevSubcategories.filter((id) => id !== subcategoryId)
         : [...prevSubcategories, subcategoryId];
+      onFilterChange(updatedSubcategories, localSelectedBrands);
+      return updatedSubcategories;
     });
   };
 
   const handleBrandChange = (brandId) => {
-    setSelectedBrands((prevBrands) => {
-      return prevBrands.includes(brandId)
+    setLocalSelectedBrands((prevBrands) => {
+      const updatedBrands = prevBrands.includes(brandId)
         ? prevBrands.filter((id) => id !== brandId)
         : [...prevBrands, brandId];
+      onFilterChange(localSelectedSubcategories, updatedBrands);
+      return updatedBrands;
     });
   };
 
   useEffect(() => {
-    onFilterChange(selectedSubcategories, selectedBrands);
-  }, [selectedSubcategories, onFilterChange, selectedBrands]);
+    setLocalSelectedSubcategories(selectedSubcategories);
+    setLocalSelectedBrands(selectedBrands);
+  }, [selectedSubcategories, selectedBrands]);
 
   return (
     <>
       <div className="space-y-4">
-        <h2 className=" font-bold">Categories</h2>
+        <h2 className="font-bold">Categories</h2>
         {categories.map((category) => (
           <div key={category.category_id} className="border p-2">
             <div className="flex justify-between items-center">
@@ -56,10 +71,10 @@ const SideFilters = ({ categories, onFilterChange, brands }) => {
                       className="form-checkbox"
                       value={subcategory.subcategory_name}
                       onChange={() =>
-                        handleSubcategoryChange(subcategory.subcategory_id)
+                        handleSubcategoryChange(subcategory.subcategory_name)
                       }
-                      checked={selectedSubcategories.includes(
-                        subcategory.subcategory_id
+                      checked={localSelectedSubcategories.includes(
+                        subcategory.subcategory_name
                       )}
                       disabled={!subcategory.subcategory_name}
                     />
@@ -81,8 +96,8 @@ const SideFilters = ({ categories, onFilterChange, brands }) => {
                 type="checkbox"
                 className="form-checkbox"
                 value={brand.brand_name}
-                onChange={() => handleBrandChange(brand.brand_id)}
-                checked={selectedBrands.includes(brand.brand_id)}
+                onChange={() => handleBrandChange(brand.brand_name)}
+                checked={localSelectedBrands.includes(brand.brand_name)}
               />
               <span className="ml-2">{brand.brand_name}</span>
             </label>

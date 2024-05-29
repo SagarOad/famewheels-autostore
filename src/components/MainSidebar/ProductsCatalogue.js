@@ -16,23 +16,23 @@ const ProductsCatalogue = ({
   searchQuery,
 }) => {
   const [productsData, setProductsData] = useState([]);
+  const [imagepath, setImagePath] = useState("");
   const [error, setError] = useState(false);
-
+//  const mainImagePath = imagePath; 
   useEffect(() => {
     let timeoutId;
     const fetchData = async () => {
       try {
-        // Manually construct the payload
         const params = new URLSearchParams();
-        subcategories.forEach(subcategory => params.append('subcategory_name[]', subcategory));
-        brands.forEach(brand => params.append('brands[]', brand));
+        subcategories?.forEach(subcategory => params.append('subcategory_name[]', subcategory));
+        brands?.forEach(brand => params.append('brand_name[]', brand));
         if (searchQuery) {
           params.append('product_name', searchQuery);
         }
 
         const response = await axios.post(`${BASE_URL}/product-filter`, params);
         setProductsData(response?.data?.posts?.data);
-        console.log(response?.data?.posts?.data, "prrrrrrrrrrrrroooooooooooo");
+        setImagePath(response?.data?.imagepath);
         clearTimeout(timeoutId);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -79,6 +79,7 @@ const ProductsCatalogue = ({
                 product={product}
                 viewMode={viewMode}
                 addToCart={addToCart}
+                imagepath={imagepath} 
               />
             </div>
           ))}
@@ -91,6 +92,7 @@ const ProductsCatalogue = ({
                 product={product}
                 viewMode={viewMode}
                 addToCart={addToCart}
+                imagePath={imagePath} 
               />
             </div>
           ))}

@@ -9,7 +9,7 @@ import axios from "axios";
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
-const ProductCard = ({ product, viewMode, addToCart }) => {
+const ProductCard = ({ product, viewMode, addToCart, imagepath }) => {
   const [userData, setUserData] = useState("");
 
   const allUserData = Cookies.get("userData");
@@ -19,7 +19,6 @@ const ProductCard = ({ product, viewMode, addToCart }) => {
     if (allUserData) {
       setUserData(JSON.parse(allUserData));
     }
-    console.log(userData, "Data token test");
   }, []);
 
   const handleAddToCart = async () => {
@@ -48,6 +47,7 @@ const ProductCard = ({ product, viewMode, addToCart }) => {
 
     toast.success("Added to cart successfully");
   };
+
   return (
     <>
       {viewMode === "grid" ? (
@@ -59,9 +59,11 @@ const ProductCard = ({ product, viewMode, addToCart }) => {
             >
               <Image
                 className="peer absolute top-0 w-full mx-auto object-cover"
+                width={1000}
+                height={1000}
                 src={
-                  product.imagepath && product.product_cover
-                    ? `${product.imagepath}/${product.product_cover}`
+                  imagepath && product.product_cover
+                    ? `${imagepath}/${product.product_token}/${product.product_cover}`
                     : defaultImage
                 }
                 alt="product image"

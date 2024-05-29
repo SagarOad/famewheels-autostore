@@ -1,21 +1,22 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductsCatalogue from "./ProductsCatalogue";
 import SideFilters from "./SideFilters";
 
-export default function MainSidebar({ viewMode, categories, brands, searchQuery }) {
+export default function MainSidebar({
+  viewMode,
+  categories,
+  brands,
+  searchQuery,
+  onFilterChange,
+  selectedSubcategories,
+  selectedBrands,
+}) {
   const [cartItems, setCartItems] = useState([]);
-  const [selectedSubcategories, setSelectedSubcategories] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
 
   const addToCart = (product) => {
     setCartItems([...cartItems, product]);
     console.log("Product added to cart");
-  };
-
-  const handleFilterChange = (subcategories, brands) => {
-    setSelectedSubcategories(subcategories);
-    setSelectedBrands(brands);
   };
 
   return (
@@ -31,7 +32,9 @@ export default function MainSidebar({ viewMode, categories, brands, searchQuery 
               <SideFilters
                 categories={categories}
                 brands={brands}
-                onFilterChange={handleFilterChange}
+                onFilterChange={onFilterChange}
+                selectedSubcategories={selectedSubcategories}
+                selectedBrands={selectedBrands}
               />
             </div>
             <div className="md:col-span-8 pl-12">

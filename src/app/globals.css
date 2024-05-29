@@ -84,12 +84,50 @@
   font-family: "Roboto Condensed", sans-serif;
 }
 
-
+.main-search {
+  background-image: linear-gradient(to right, #6c02024f, #6c02024f),
+  url(../assets/1600348.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.main-banner-landing {
+  background-image: linear-gradient(to right, #6c020200, #6c020200),
+    url(../assets/bap-autoparts-banner.webp);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.main-banner-landing2 {
+  background-image: linear-gradient(to right, #6c020200, #6c020200),
+    url(../assets/part-banner.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.main-banner-landing3 {
+  background-image: linear-gradient(to right, #6c020200, #6c020200),
+    url(../assets/banner-2-road_new.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
 .main-banner {
   background-image: linear-gradient(to right, #6c0202, #6c0202b6),
     url(../assets/carParts.jpg);
   background-position: center;
-  background-size: cover;
   background-size: cover;
 }
 
@@ -165,3 +203,12 @@
 .flex.h-10.items-center.space-x-1.rounded-md.border.bg-background.p-1 {
   border: none;
 }
+
+/* div#radix-\:R3mkqH2\: {
+  height: 200px;
+  width: 579px;
+} */
+
+/* .slick-slide.slick-active.slick-current {
+  margin: 0px 11px;
+} */

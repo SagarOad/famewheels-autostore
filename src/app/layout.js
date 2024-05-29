@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import { ToastContainer } from "react-toastify";
 import TokenHandler from "@/components/TokenHandler";
 import MainProvider from "@/NoSSRProvider/MainProvider";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,12 +18,13 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
         <ToastContainer />
-        <div className="max-w-[1600px] mx-auto">
+        <div className="mx-auto">
           <MainProvider>
             <Navbar />
             <TokenHandler />
             {children}
           </MainProvider>
+          <Footer />
         </div>
       </body>
     </html>
