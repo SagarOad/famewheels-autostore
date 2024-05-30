@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ProductsCatalogue from "./ProductsCatalogue";
 import SideFilters from "./SideFilters";
 
@@ -7,10 +7,12 @@ export default function MainSidebar({
   viewMode,
   categories,
   brands,
+  makes,
   searchQuery,
   onFilterChange,
   selectedSubcategories,
   selectedBrands,
+  selectedMakes,
 }) {
   const [cartItems, setCartItems] = useState([]);
 
@@ -32,9 +34,11 @@ export default function MainSidebar({
               <SideFilters
                 categories={categories}
                 brands={brands}
+                makes={makes}
                 onFilterChange={onFilterChange}
                 selectedSubcategories={selectedSubcategories}
                 selectedBrands={selectedBrands}
+                selectedMakes={selectedMakes}
               />
             </div>
             <div className="md:col-span-8 pl-12">
@@ -43,6 +47,7 @@ export default function MainSidebar({
                 addToCart={addToCart}
                 subcategories={selectedSubcategories}
                 brands={selectedBrands}
+                makes={selectedMakes}
                 searchQuery={searchQuery}
               />
             </div>

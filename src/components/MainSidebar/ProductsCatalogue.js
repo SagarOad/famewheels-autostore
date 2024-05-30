@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../ProductCard/ProductCard";
@@ -12,13 +11,14 @@ const ProductsCatalogue = ({
   viewMode,
   addToCart,
   brands,
+  makes,
   subcategories,
   searchQuery,
 }) => {
   const [productsData, setProductsData] = useState([]);
   const [imagepath, setImagePath] = useState("");
   const [error, setError] = useState(false);
-//  const mainImagePath = imagePath; 
+
   useEffect(() => {
     let timeoutId;
     const fetchData = async () => {
@@ -26,12 +26,14 @@ const ProductsCatalogue = ({
         const params = new URLSearchParams();
         subcategories?.forEach(subcategory => params.append('subcategory_name[]', subcategory));
         brands?.forEach(brand => params.append('brand_name[]', brand));
+        makes?.forEach(make => params.append('make_name[]', make));
         if (searchQuery) {
           params.append('product_name', searchQuery);
         }
 
         const response = await axios.post(`${BASE_URL}/product-filter`, params);
         setProductsData(response?.data?.posts?.data);
+        console.log(productsData, "Products data fetch");
         setImagePath(response?.data?.imagepath);
         clearTimeout(timeoutId);
       } catch (error) {
@@ -47,7 +49,7 @@ const ProductsCatalogue = ({
     fetchData();
 
     return () => clearTimeout(timeoutId);
-  }, [subcategories, brands, searchQuery]);
+  }, [subcategories, brands, makes, searchQuery]);
 
   if (error) {
     return (
@@ -92,7 +94,7 @@ const ProductsCatalogue = ({
                 product={product}
                 viewMode={viewMode}
                 addToCart={addToCart}
-                imagePath={imagePath} 
+                imagepath={imagepath} 
               />
             </div>
           ))}

@@ -12,27 +12,25 @@ const MainSidebarWrapper = () => {
   const [viewMode, setViewMode] = useState("grid");
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [makes, setMakes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedSubcategories, setSelectedSubcategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedMakes, setSelectedMakes] = useState([]);
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const categoryResponse = await axios.get(
-          `${BASE_URL}/product-sub-categories`
-        );
-        const brandResponse = await axios.get(`${BASE_URL}/brand-list`, {
-          headers: {
-            Authorization: `Bearer your-token-here`, // Replace with your actual token
-          },
-        });
+        const categoryResponse = await axios.get(`${BASE_URL}/product-sub-categories`);
+        const brandResponse = await axios.get(`${BASE_URL}/brand-list`);
+        const makeResponse = await axios.get(`${BASE_URL}/byMake`);
         setCategories(categoryResponse?.data?.product_Categories || []);
         setBrands(brandResponse?.data[1]?.data || []);
+        setMakes(makeResponse?.data || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -45,13 +43,14 @@ const MainSidebarWrapper = () => {
   }, []);
 
   useEffect(() => {
-    const subcategoriesFromUrl =
-      searchParams.get("subcategories")?.split(",") || [];
+    const subcategoriesFromUrl = searchParams.get("subcategories")?.split(",") || [];
     const brandsFromUrl = searchParams.get("brands")?.split(",") || [];
+    const makesFromUrl = searchParams.get("makes")?.split(",") || [];
     const searchQueryFromUrl = searchParams.get("searchQuery") || "";
 
     setSelectedSubcategories(subcategoriesFromUrl);
     setSelectedBrands(brandsFromUrl);
+    setSelectedMakes(makesFromUrl);
     setSearchQuery(searchQueryFromUrl);
   }, []);
 
@@ -68,6 +67,11 @@ const MainSidebarWrapper = () => {
       } else {
         queryParams.delete("brands");
       }
+      if (selectedMakes.length > 0) {
+        queryParams.set("makes", selectedMakes.join(","));
+      } else {
+        queryParams.delete("makes");
+      }
       if (searchQuery) {
         queryParams.set("searchQuery", searchQuery);
       } else {
@@ -78,7 +82,7 @@ const MainSidebarWrapper = () => {
     };
 
     updateUrl();
-  }, [selectedSubcategories, selectedBrands, searchQuery]);
+  }, [selectedSubcategories, selectedBrands, selectedMakes, searchQuery]);
 
   const toggleViewMode = () => {
     setViewMode((prevMode) => (prevMode === "grid" ? "list" : "grid"));
@@ -88,9 +92,10 @@ const MainSidebarWrapper = () => {
     setSearchQuery(query);
   };
 
-  const handleFilterChange = (subcategories, brands) => {
+  const handleFilterChange = (subcategories, brands, makes) => {
     setSelectedSubcategories(subcategories);
     setSelectedBrands(brands);
+    setSelectedMakes(makes);
   };
 
   if (loading) {
@@ -108,10 +113,12 @@ const MainSidebarWrapper = () => {
         viewMode={viewMode}
         categories={categories}
         brands={brands}
+        makes={makes}
         searchQuery={searchQuery}
         onFilterChange={handleFilterChange}
         selectedSubcategories={selectedSubcategories}
         selectedBrands={selectedBrands}
+        selectedMakes={selectedMakes}
       />
     </main>
   );

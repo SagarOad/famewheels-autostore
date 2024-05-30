@@ -14,7 +14,7 @@ const ProductCard = ({ product, viewMode, addToCart, imagepath }) => {
 
   const allUserData = Cookies.get("userData");
   const cartToken = Cookies.get("user_token");
-
+ console.log(imagepath, "iMAGE CHECK")
   useEffect(() => {
     if (allUserData) {
       setUserData(JSON.parse(allUserData));

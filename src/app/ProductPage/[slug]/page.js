@@ -3,9 +3,7 @@
 import ProductImageSlide from "@/components/ProductImageSlide";
 // import SearchBox from "@/components/SearchBox";
 import SellerDetailBox from "@/components/SellerDetailBox";
-import { data } from "autoprefixer";
 import React, { useState, useEffect } from "react";
-import loader from "../../../assets/timer.gif";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,8 +11,9 @@ import Cookies from "js-cookie";
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
-const page = ({ params }) => {
+const Page = ({ params }) => {
   const [productData, setProductData] = useState(null);
+  const [productImages, setProductImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -29,7 +28,7 @@ const page = ({ params }) => {
       setUserData(JSON.parse(allUserData));
     }
     console.log(userData, "Data token test");
-  }, []);
+  }, [allUserData]);
 
   const increaseQuantity = () => {
     if (quantity < 5) {
@@ -43,35 +42,48 @@ const page = ({ params }) => {
     }
   };
 
-  const images = [
-    {
-      original:
-        "https://www.buyautoparts.com/data/all_images/MP0162A_DHBX-map.jpg",
-      thumbnail:
-        "https://www.buyautoparts.com/data/all_images/MP0162A_DHBX-map.jpg",
-    },
-    {
-      original:
-        "https://www.buyautoparts.com/data/all_images/MP0162B_DHBX-map.jpg",
-      thumbnail:
-        "https://www.buyautoparts.com/data/all_images/MP0162B_DHBX-map.jpg",
-    },
-    {
-      original:
-        "https://www.buyautoparts.com/data/all_images/MP0162C_DHBX-map.jpg",
-      thumbnail:
-        "https://www.buyautoparts.com/data/all_images/MP0162C_DHBX-map.jpg",
-    },
-  ];
-
-  console.log(params.slug);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          `${BASE_URL}/product-detail/?product_slug=${params.slug}`
+          `${BASE_URL}/product-detail`,
+          {
+            product_slug: params.slug,
+          },
+          {
+            maxRedirects: 0,
+          }
         );
-        setProductData(response.data);
+        if (response.status === 301 || response.status === 302) {
+          const newUrl = response.headers.location;
+          const newResponse = await axios.get(newUrl);
+          setProductData(newResponse.data);
+        } else {
+          setProductData(response.data);
+        }
+
+        const productToken = response.data?.products?.product_token;
+
+        if (productToken) {
+          const formData = new FormData();
+          const UserToken = localStorage.getItem("token");
+          formData.append("product_token", productToken);
+
+          const imagesResponse = await axios.post(
+            `${BASE_URL}/product-images`,
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${UserToken}`,
+              },
+            }
+          );
+          const images = imagesResponse.data.product_images.map((img) => ({
+            original: `${imagesResponse.data.imagepath}/${productToken}/${img.image_name}`,
+            thumbnail: `${imagesResponse.data.imagepath}/${productToken}/${img.image_name}`,
+          }));
+          setProductImages(images);
+        }
       } catch (error) {
         setError("Error fetching data");
         console.error("Error fetching data:", error);
@@ -105,12 +117,11 @@ const page = ({ params }) => {
         },
       });
       console.log("Added to cart:", response.data);
+      toast.success("Added to cart successfully");
     } catch (error) {
       toast.error("Error adding to cart");
       console.error("Error adding to cart:", error);
     }
-
-    toast.success("Added to cart successfully");
   };
 
   const productActualPrice = productData?.products?.product_actual_price;
@@ -130,16 +141,16 @@ const page = ({ params }) => {
   if (loading)
     return (
       <div className=" w-full h-[100vh] mt-[-112px] flex justify-center items-center">
-        <div class="loader"></div>
+        <div className="loader"></div>
       </div>
     );
-  // if (error) return <p>{error}</p>;
+
   return (
     <>
       {/* <SearchBox /> */}
       <div>{error !== null ? <p>{error}</p> : ""}</div>
 
-      <div className="antialiased">
+      <div className="antialiased max-w-[1600px] mx-auto">
         <div className="py-16">
           <div className=" px-4 sm:px-6 lg:px-8">
             <div className="flex items-center space-x-2 text-gray-400 text-sm">
@@ -155,9 +166,9 @@ const page = ({ params }) => {
                   stroke="currentColor"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M9 5l7 7-7 7"
                   />
                 </svg>
@@ -174,9 +185,9 @@ const page = ({ params }) => {
                   stroke="currentColor"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M9 5l7 7-7 7"
                   />
                 </svg>
@@ -185,15 +196,15 @@ const page = ({ params }) => {
             </div>
           </div>
 
-          <div className=" px-4 sm:px-6 lg:px-8 mt-6">
+          <div className="px-4 sm:px-6 lg:px-8 mt-6">
             <div className="grid grid-cols-12 -mx-4">
               <div className="md:col-span-6 relative col-span-12 px-4">
                 <div x-data="{ image: 1 }" x-cloak>
                   <div className="h-64 md:h-80 rounded-lg bg-gray-100 mb-4">
-                    <div className=" discount"></div>
+                    <div className="discount"></div>
                     <ProductImageSlide
                       discountPercentage={discountPercentage}
-                      images={images}
+                      images={productImages}
                     />
                   </div>
 
@@ -215,208 +226,90 @@ const page = ({ params }) => {
                 <div className="flex items-center space-x-4 my-4">
                   <div>
                     <div className="rounded-lg flex py-2 px-3">
-                      <span className="text-slate-900 text-3xl mr-1">
-                        Rs {"  "}
-                      </span>
+                      <span className="text-slate-900 text-3xl mr-1">Rs </span>
                       <span className="font-bold text-slate-900 text-3xl">
                         {productData?.products.product_discounted_price}
                       </span>
                     </div>
-                    <div className="py-2 px-3">
-                      <span>Original Price </span>
-                      <span className=" font-bold line-through">
-                        Rs {productData?.products.product_actual_price}
-                      </span>
-                    </div>
-                    <div className="py-2 px-3">
-                      <span>You Save: </span>
-                      <span className=" font-bold text-[#39b54a]">
-                        Rs ${amountSaved}
-                      </span>
-                    </div>
                   </div>
-
                   <div className="flex-1">
-                    {/* <p className="text-green-500 text-xl font-semibold">Save 12%</p> */}
-                    {/* <p className="text-gray-400 text-sm">Inclusive of all Taxes.</p> */}
+                    <p className="text-green-500 text-xl font-semibold">
+                      Save Rs {amountSaved}
+                    </p>
+                    <p className="text-gray-400 text-sm">
+                      Inclusive of all Taxes.
+                    </p>
                   </div>
                 </div>
-                <div></div>
+
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: productData?.products.product_description,
+                  }}
+                />
+
                 <div className="flex py-4 space-x-4">
+                  <div className="relative">
+                    <div className="flex items-center border rounded w-max overflow-hidden">
+                      <button
+                        className="h-full p-2 hover:bg-gray-100 border-r"
+                        onClick={decreaseQuantity}
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        className="w-12 h-full flex items-end px-2 text-center font-semibold text-gray-700 mx-2 outline-none"
+                        value={quantity}
+                        readOnly
+                      />
+                      <button
+                        className="h-full p-2 hover:bg-gray-100 border-l"
+                        onClick={increaseQuantity}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
                   <button
-                    type="button"
-                    className="px-20 text-[21px] font-semibold bg-[#20409a] text-white"
                     onClick={handleAddToCart}
+                    className="h-12 px-6 py-2 font-semibold rounded-xl bg-[#20409a] hover:bg-[#2d59da] text-white"
                   >
                     Add to Cart
                   </button>
-                  <div>
-                    <svg
-                      className="w-5 h-5 text-gray-400 absolute right-0 bottom-0"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                      />
-                    </svg>
-                    <div className=" relative">
-                      <div className="flex items-center space-x-2">
-                        <button
-                          className="cursor-pointer text-[22px] w-[40px] text-center rounded-xl border border-gray-500 p-2 h-14 flex items-center justify-center"
-                          onClick={decreaseQuantity}
-                        >
-                          -
-                        </button>
-                        <select
-                          className="cursor-pointer text-[22px] pb-[8px] w-[80px] text-center appearance-none rounded-xl border border-gray-500 p-2 h-14 flex items-end"
-                          value={quantity}
-                          onChange={(e) =>
-                            setQuantity(parseInt(e.target.value))
-                          }
-                        >
-                          {[1, 2, 3, 4, 5].map((qty) => (
-                            <option key={qty} value={qty}>
-                              {qty}
-                            </option>
-                          ))}
-                        </select>
-                        <button
-                          className="cursor-pointer text-[22px] w-[40px] text-center rounded-xl border border-gray-500 p-2 h-14 flex items-center justify-center"
-                          onClick={increaseQuantity}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-12 mt-[250px] -mx-4">
-              <div className="md:col-span-7 col-span-12 px-4">
-                <div>
-                  <p className="text-slate-900 mb-4 text-[16px]">
-                    {productData?.products.product_description}
-                  </p>
-                  <h2 className=" text-[20px] font-bold">Directions for Use</h2>
-                  <ul>
-                    <li>
-                      1. Begin by cleaning the surface with All-purpose cleaner.
-                      Ensure the surface is free of dirt and grime.
-                    </li>
-                    <li>2. Shake the product well before use. .</li>
-                    <li>
-                      3. Spray directly onto an applicator or towel and apply
-                      evenly onto the desired surface.
-                    </li>
-                    <li>
-                      4. Spread the dressing over the entire workpiece, ensuring
-                      thorough coverage.
-                    </li>
-                    <li>5. Allow the product to dry for a few minutes.</li>
-                    <li>
-                      6. Buff off any excess residue with a clean microfiber
-                      towel.
-                    </li>
-                    <li>
-                      7. Reapply as needed to achieve the desired level of shine
-                      and protection.
-                    </li>
-                  </ul>
+            <div className="px-4 sm:px-6 lg:px-8 mt-40">
+              <div className="flex flex-wrap -mx-4 mb-24">
+                <div className="md:w-1/3 px-4 py-2">
+                  <div className="bg-white shadow-lg rounded-lg p-6">
+                    <h2 className="font-semibold mb-2 roboto-condensed">
+                      Seller Information
+                    </h2>
+                    <SellerDetailBox seller={productData?.products} />
+                  </div>
                 </div>
-
-                <div>
-                  <h2 className=" text-[20px] font-bold mt-4">
-                    Tips for Optimal Results
-                  </h2>
-                  <p className="text-slate-900 text-[16px]">
-                    Always work on a cool surface and in the shade to prevent
-                    premature drying. Avoid applying the product to glass, paint
-                    and seats to prevent potential damage. In case of eye
-                    contact, rinse thoroughly with water. Keep out of reach of
-                    children.
-                  </p>
-                </div>
-              </div>
-              <div className="md:col-span-5 col-span-12 pl-24 py-6">
-                <div className="">
-                  <div className="flex">
-                    <div className="flex">
-                      <div className=" border-[1px] border-black">
-                        <h2 className=" text-[20px] font-[400] py-3 border-b-2 text-center">
-                          Seller Detials
-                        </h2>
-                        <div className=" px-12">
-                          <div className=" flex justify-center items-center">
-                            <div>
-                              <img
-                                className=" w-[60px] mr-5"
-                                src="https://fcache1.pakwheels.com/original/4X/9/4/8/948a620e5554ab2acc6975fbe515a1c81c408f77.jpg"
-                              />
-                            </div>
-                            <div>
-                              <h2 className="text-[#20409a] text-[14px]">
-                                {productData?.products.vendor_name}
-                              </h2>
-                              <a className="text-[14px]">
-                                More ads by {productData?.products.vendor_name}
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <div className=" flex justify-center pt-3 pb-4 items-center">
-                            <div className=" mx-2 bg-[#20409a] w-10 h-10 rounded-full flex justify-center items-center text-white">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="w-6 h-6"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
-                                />
-                              </svg>
-                            </div>
-                            <div className=" mx-2 bg-[#20409a] w-10 h-10 rounded-full flex justify-center items-center text-white">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="w-6 h-6"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
-                                />
-                              </svg>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border-[1px] border-black w-[300px] flex justify-center items-center">
-                      <div>Ad Space</div>
-                    </div>
+                <div className="md:w-2/3 px-4 py-2">
+                  <div className="bg-white shadow-lg rounded-lg p-6">
+                    <h2 className="font-semibold mb-2 roboto-condensed">
+                      Product Features
+                    </h2>
+                    <ul className="space-y-2">
+                      {productData?.products?.product_features?.map(
+                        (feature, index) => (
+                          <li key={index} className="text-gray-700 text-sm">
+                            {feature}
+                          </li>
+                        )
+                      )}
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
+            <hr className="mt-10" />
           </div>
         </div>
       </div>
@@ -424,4 +317,4 @@ const page = ({ params }) => {
   );
 };
 
-export default page;
+export default Page;

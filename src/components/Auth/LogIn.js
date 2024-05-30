@@ -32,6 +32,11 @@ const LogIn = () => {
       setUserData(JSON.parse(allUserData));
     }
     console.log(userData, "Data token test");
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      getUserData
+    }
   }, [allUserData]);
 
   const handleEmailLogin = async (e) => {
@@ -103,8 +108,10 @@ const LogIn = () => {
     }
   };
 
-  const getUserData = async (token) => {
+  const getUserData = async () => {
     try {
+
+      const token = localStorage.getItem("token");
       const response = await axios.get(`${BASE_URL}/getUser`, {
         headers: {
           Authorization: `Bearer ${token}`,
