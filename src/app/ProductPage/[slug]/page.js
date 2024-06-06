@@ -149,7 +149,7 @@ const Page = ({ params }) => {
     <>
       {/* <SearchBox /> */}
       <div>{error !== null ? <p>{error}</p> : ""}</div>
-
+      <div className=" bg-black hidden lg:block w-full h-24"></div>
       <div className="antialiased max-w-[1600px] mx-auto">
         <div className="py-16">
           <div className=" px-4 sm:px-6 lg:px-8">
@@ -211,7 +211,7 @@ const Page = ({ params }) => {
                   <div className="flex -mx-2 mb-4"></div>
                 </div>
               </div>
-              <div className="md:col-span-6 col-span-12 pl-4">
+              <div className="md:col-span-6 col-span-12 mt-[250px] lg:mt-0 pl-4">
                 <h2 className="mb-2 leading-tight roboto-condensed tracking-tight font-bold text-[#20409a] text-2xl md:text-4xl">
                   {/* Product title */}
                   {productData?.products.product_title}
@@ -282,7 +282,7 @@ const Page = ({ params }) => {
             </div>
 
             <div className="px-4 sm:px-6 lg:px-8 mt-40">
-              <div className="flex flex-wrap -mx-4 mb-24">
+              <div className="md:flex block flex-wrap -mx-4 mb-24">
                 <div className="md:w-1/3 px-4 py-2">
                   <div className="bg-white shadow-lg rounded-lg p-6">
                     <h2 className="font-semibold mb-2 roboto-condensed">

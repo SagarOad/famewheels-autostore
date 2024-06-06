@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import axios from "axios";
 import SearchBox from "../SearchBox/SearchBox";
 import MainSidebar from "./MainSidebar";
@@ -28,7 +28,7 @@ const MainSidebarWrapper = () => {
         const categoryResponse = await axios.get(`${BASE_URL}/product-sub-categories`);
         const brandResponse = await axios.get(`${BASE_URL}/brand-list`);
         const makeResponse = await axios.get(`${BASE_URL}/byMake`);
-        setCategories(categoryResponse?.data?.product_Categories || []);
+        setCategories(categoryResponse?.data?.product_subCategories || []);
         setBrands(brandResponse?.data[1]?.data || []);
         setMakes(makeResponse?.data || []);
         setLoading(false);
@@ -77,7 +77,7 @@ const MainSidebarWrapper = () => {
       } else {
         queryParams.delete("searchQuery");
       }
-      const newUrl = `/?${queryParams.toString()}`;
+      const newUrl = `/MainPage?${queryParams.toString()}`;
       router.push(newUrl);
     };
 
@@ -107,6 +107,7 @@ const MainSidebarWrapper = () => {
   }
 
   return (
+      
     <main className="mx-auto max-full px-4">
       <SearchBox toggleViewMode={toggleViewMode} onSearch={handleSearch} />
       <MainSidebar
@@ -121,6 +122,7 @@ const MainSidebarWrapper = () => {
         selectedMakes={selectedMakes}
       />
     </main>
+
   );
 };
 

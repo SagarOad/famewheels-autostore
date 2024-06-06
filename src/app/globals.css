@@ -85,12 +85,34 @@
 }
 
 .main-search {
-  background-image: linear-gradient(to right, #6c02024f, #6c02024f),
-  url(../assets/1600348.jpg);
+  background-image: linear-gradient(to right, #3900008e, #3900008e),
+    url(../assets/sunset-car.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
 }
+.car-care-banner {
+  background-image: linear-gradient(to right, #3900008e, #3900008e),
+    url(../assets/car-care.jpg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.car-interior-banner {
+  background-image: linear-gradient(to right, #3900008e, #3900008e),
+    url(../assets/car-interior.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.car-exterior-banner {
+  background-image: linear-gradient(to right, #3900008e, #3900008e),
+    url(../assets/exterior-car.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
 .main-banner-landing {
   background-image: linear-gradient(to right, #6c020200, #6c020200),
     url(../assets/bap-autoparts-banner.webp);
@@ -202,6 +224,10 @@
 
 .flex.h-10.items-center.space-x-1.rounded-md.border.bg-background.p-1 {
   border: none;
+}
+
+button#radix-\:rb\: {
+  padding: 0 !important;
 }
 
 /* div#radix-\:R3mkqH2\: {

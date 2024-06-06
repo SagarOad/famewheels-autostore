@@ -8,10 +8,6 @@ const ProductCart = () => {
     <>
       <div>
         <Sheet>
-          <SheetTrigger asChild>
-            <button variant="outline">Open</button>
-          </SheetTrigger>
-
           <SheetContent>
             <CartItem />
           </SheetContent>

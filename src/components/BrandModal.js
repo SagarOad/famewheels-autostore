@@ -1,29 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const BrandModal = ({ isOpen, onClose }) => {
-  // Generate 100 dummy brand options
-  const brands = Array.from({ length: 100 }, (_, index) => `Brand ${index + 1}`);
+const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+
+const BrandModal = ({ selectedBrands, onBrandChange }) => {
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${BASE_URL}/brand-list`)
+      .then((response) => {
+        setBrands(response?.data[1]?.data || []);
+      })
+      .catch((error) => {
+        console.error("Error fetching brands:", error);
+      });
+  }, []);
 
   return (
-    isOpen && (
-      <div className="modal">
-        <div className="modal-content">
-          <span className="close" onClick={onClose}>&times;</span>
-          <h2>Brands</h2>
-          <ul>
-            <li>Option 1</li>
-            <li>Option 2</li>
-            <li>Option 3</li>
-            <li>Option 4</li>
-            <li>Option 5</li>
-            <li>Option 6</li>
-            {/* {brands.map((brand, index) => (
-              <li key={index}>{brand}</li>
-            ))} */}
-          </ul>
+    <div>
+      <div className="p-6">
+        <h2 className="text-xl font-bold mb-4">Select Brand</h2>
+        <div className="mb-4">
+          <div className="grid grid-cols-2 h-[500px] overflow-y-scroll p-4 gap-4 mt-2">
+            {brands?.map((brand) => (
+              <label
+                key={brand.brand_id}
+                className="flex items-center space-x-2"
+              >
+                <input
+                  type="checkbox"
+                  className="form-checkbox"
+                  checked={selectedBrands.includes(brand.brand_name)}
+                  onChange={() => onBrandChange(brand.brand_name)}
+                />
+                <span>{brand.brand_name}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div className="flex justify-end space-x-4">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
+            Search
+          </button>
         </div>
       </div>
-    )
+    </div>
   );
 };
 

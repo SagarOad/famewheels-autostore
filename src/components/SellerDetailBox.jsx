@@ -3,7 +3,7 @@ import React from "react";
 const SellerDetailBox = () => {
   return (
     <div className="">
-      <div className="flex">
+      <div className="md:flex block">
         <div className="flex">
           <div className=" border-[1px] border-black">
             <h2 className=" text-[20px] font-[400] py-3 border-b-2 text-center">
@@ -62,7 +62,7 @@ const SellerDetailBox = () => {
           </div>
         </div>
 
-        <div className="border-[1px] border-black w-[300px] flex justify-center items-center">
+        <div className="border-[1px] border-black md:w-[300px] w-[220px] flex justify-center items-center">
           <div>Ad Space</div>
         </div>
       </div>

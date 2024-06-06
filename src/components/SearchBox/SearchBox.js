@@ -45,13 +45,13 @@ const SearchBox = ({ toggleViewMode, onSearch }) => {
 
   return (
     <div>
-      <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-8">
-        <h1 className="text-3xl font-[600] tracking-tight text-gray-900">
+      <div className="block lg:flex items-baseline justify-between border-b border-gray-200 pb-6 pt-8">
+        <h1 className="md:text-3xl text-[22px] mb-2 font-[600] tracking-tight text-gray-900">
           Search Spare Parts
         </h1>
 
-        <div className="flex items-center">
-          <div className="mr-16">
+        <div className="flex items-center justify-between">
+          <div className="md:mr-16 mr-6">
             <label
               htmlFor="default-search"
               className="mb-2 text-sm font-medium text-gray-900 sr-only"
@@ -79,7 +79,7 @@ const SearchBox = ({ toggleViewMode, onSearch }) => {
               <input
                 type="search"
                 id="default-search"
-                className="block w-[380px] p-4 ps-10 h-12 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-0"
+                className="block md:w-[380px] w-[260px] p-4 ps-10 md:h-12 h-8 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-0"
                 placeholder="Search Products"
                 required
                 value={searchTerm}
@@ -87,14 +87,14 @@ const SearchBox = ({ toggleViewMode, onSearch }) => {
               />
               <button
                 type="submit"
-                className="text-white absolute right-0 h-12 bottom-0 bg-[#20409a] focus:ring-4 focus:outline-none font-medium text-[16px] px-6 py-3"
+                className="text-white absolute right-0 md:h-12 h-8 bottom-0 bg-[#20409a] focus:ring-4 focus:outline-none font-medium md:text-[16px] text-[14px] px-6  md:py-3"
                 onClick={handleSearch} // Attach handleSearch to button
               >
                 Search
               </button>
             </div>
           </div>
-          <Menu as="div" className="relative inline-block text-left">
+          {/* <Menu as="div" className="relative inline-block text-left">
             <div>
               <Menu.Button className="group inline-flex justify-center font-medium px-4 text-[18px] text-gray-900">
                 Sort
@@ -137,24 +137,19 @@ const SearchBox = ({ toggleViewMode, onSearch }) => {
                 </div>
               </Menu.Items>
             </Transition>
-          </Menu>
+          </Menu> */}
 
-          <button
-            type="button"
-            onClick={toggleViewMode}
-            className="-m-2 ml-5 p-2 text-gray-900 hover:text-gray-500 sm:ml-7"
-          >
-            <span className="sr-only">View grid</span>
-            <Squares2X2Icon className="h-8 w-8" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
-            onClick={() => setMobileFiltersOpen(true)}
-          >
-            <span className="sr-only">Filters</span>
-            <FunnelIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
+          <div>
+            <button
+              type="button"
+              onClick={toggleViewMode}
+              className="-m-2 md:ml-5 p-2 text-gray-900 hover:text-gray-500 sm:ml-7"
+            >
+              <span className="sr-only">View grid</span>
+              <Squares2X2Icon className="h-8 w-8" aria-hidden="true" />
+            </button>
+
+          </div>
         </div>
       </div>
     </div>

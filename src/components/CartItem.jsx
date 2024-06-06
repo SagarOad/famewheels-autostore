@@ -16,6 +16,8 @@ const CartItem = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userData, setUserData] = useState("");
+  const [imagepath, setImagePath] = useState("");
+
 
   const allUserData = Cookies.get("userData");
   const cartToken = Cookies.get("user_token");
@@ -44,8 +46,11 @@ const CartItem = () => {
             Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZmFtZXdoZWVscy1iYWNrZW5kLnRlc3QvbG9naW4iLCJpYXQiOjE3MTU3ODIxODgsImV4cCI6MTc0NzMxODE4OCwibmJmIjoxNzE1NzgyMTg4LCJqdGkiOiJFdVFNVmVvWVpCelBVbWhmIiwic3ViIjoiMiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.AVslxMDNwytRaYWpOaCKLbNRYd3jfBYUXEvwufGdRCM`, // Replace with your actual token
           },
         });
-        console.log(response?.data.products, "Product data fetched successfully");
-
+        console.log(
+          response?.data.products,
+          "Product data fetched successfully"
+        );
+        setImagePath(response?.data?.imagepath);
         SetProductCartData(response?.data.products);
         SetProductCartImgPath(response?.data?.imagepath);
       } catch (error) {
@@ -59,7 +64,7 @@ const CartItem = () => {
     if (userData || cartToken) {
       fetchData();
     }
-  }, [userData, cartToken]); 
+  }, [userData, cartToken]);
 
   const handleRemove = async (cart_id) => {
     const formData = new FormData();
@@ -88,7 +93,7 @@ const CartItem = () => {
   const cartData = {
     products: ProductCartData?.map((product) => ({
       cart_id: product.cart_id,
-      image: `${ProductCartImgPath}/${product.product_cover}`,
+      image: `${imagepath}/${product.product_token}/${product.product_cover}`,
       product_name: product.product_name,
       price: product.total_amount,
       quantity: product.product_quantity,

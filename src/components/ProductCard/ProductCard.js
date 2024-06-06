@@ -14,7 +14,7 @@ const ProductCard = ({ product, viewMode, addToCart, imagepath }) => {
 
   const allUserData = Cookies.get("userData");
   const cartToken = Cookies.get("user_token");
- console.log(imagepath, "iMAGE CHECK")
+  // console.log(imagepath, "iMAGE CHECK");
   useEffect(() => {
     if (allUserData) {
       setUserData(JSON.parse(allUserData));
@@ -51,95 +51,127 @@ const ProductCard = ({ product, viewMode, addToCart, imagepath }) => {
   return (
     <>
       {viewMode === "grid" ? (
-        <div className="w-full">
-          <div className="group flex max-w-xs w-[280px] h-[400px] flex-col overflow-hidden rounded-lg border border-[#cccccc] bg-white shadow-lg">
-            <a
-              className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
-              href="#"
-            >
-              <Image
-                className="peer absolute top-0 w-full mx-auto object-cover"
-                width={1000}
-                height={1000}
-                src={
-                  imagepath && product.product_cover
-                    ? `${imagepath}/${product.product_token}/${product.product_cover}`
-                    : defaultImage
-                }
-                alt="product image"
-              />
-              <div className="absolute bottom-0 mb-4 flex space-x-4 w-full justify-center">
-                <div className="rounded-full h-3 w-3 bg-gray-200 border-2 border-white"></div>
-                <div className="rounded-full h-3 w-3 bg-gray-200 border-2 border-white"></div>
-                <div className="rounded-full h-3 w-3 bg-gray-200 border-2 border-white"></div>
-              </div>
-              <svg
-                className="pointer-events-none absolute inset-x-0 bottom-5 mx-auto text-3xl text-white transition-opacity group-hover:animate-ping group-hover:opacity-30 peer-hover:opacity-0"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="img"
-                width="1em"
-                height="1em"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 32 32"
-              >
-                <path
-                  fill="currentColor"
-                  d="M2 10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v10a4 4 0 0 1-2.328 3.635a2.996 2.996 0 0 0-.55-.756l-8-8A3 3 0 0 0 14 17v7H6a4 4 0 0 1-4-4V10Zm14 19a1 1 0 0 0 1.8.6l2.7-3.6H25a1 1 0 0 0 .707-1.707l-8-8A1 1 0 0 0 16 17v12Z"
+        <>
+          <div className="w-full">
+            <div className="relative mb-4 w-[280px] max-w-xs overflow-hidden rounded-lg border-2 bg-white shadow-xl">
+              <a href="#">
+                <Image
+                  src={
+                    imagepath && product.product_cover
+                      ? `${imagepath}/${product.product_token}/${product.product_cover}`
+                      : defaultImage
+                  }
+                  width={1000}
+                  height={1000}
+                  class="h-60 rounded-t-lg object-cover"
+                  alt="product image"
                 />
-              </svg>
-              <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-[12px] font-medium text-white">
-                {product.product_discount} OFF
+              </a>
+              <span class="absolute top-0 left-0 w-28 translate-y-4 -translate-x-6 -rotate-45 bg-black text-center text-sm text-white">
+                Sale
               </span>
-            </a>
-            <div className="mt-4 px-4 pb-5">
-              <Link href={`/ProductPage/${product.product_slug}`}>
-                <h5 className="text-[16px] font-bold tracking-tight text-[#20409a]">
-                  {product.product_title}
-                </h5>
-              </Link>
-              <div className="mt-2 mb-2 flex items-center justify-between">
-                <p>
-                  <span className="text-xl font-bold text-slate-900">
-                    PKR {product.product_actual_price}
-                  </span>
-                </p>
+              <div className="mt-4 px-5 pb-5 overflow-hidden">
+                <a href="#">
+                <Link href={`/ProductPage/${product.product_slug}`}>
+                  <h5 class="text-xl font-semibold whitespace-nowrap overflow-hidden text-ellipsis my-2 tracking-tight text-slate-900">
+                    {product.product_title}
+                  </h5>
+                  </Link>
+                </a>
+                <div class="">
+                  <p className="mb-2">
+                    <span className="text-[18px] font-bold text-slate-900">
+                      {" "}
+                      PKR {product.product_discounted_price}
+                    </span>
+                    <span className="text-sm text-slate-900 line-through">
+                      {product.product_actual_price}
+                    </span>
+                  </p>
+                  <button
+                    href="#"
+                    onClick={handleAddToCart}
+                    className="flex items-center rounded-md bg-[#b80505] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mr-2 h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+                    Add to cart
+                  </button>
+                </div>
               </div>
-              <button className="flex items-center justify-center w-full border-2 mb-2 border-[#b80505] rounded-md bg-text bg-white px-5 py-2 text-center text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-300">
-                Buy Now
-              </button>
-              <button
-                className="flex items-center w-full justify-center rounded-md bg-[#b80505] px-5 py-2 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
-                onClick={handleAddToCart}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="mr-2 h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-                Add to cart
-              </button>
             </div>
           </div>
-        </div>
+
+ {/* New card */}
+          {/* <div class="relative m-10 w-full max-w-xs overflow-hidden rounded-lg bg-white shadow-md">
+            <a href="#">
+              <img
+                class="h-60 rounded-t-lg object-cover"
+                src="https://images.unsplash.com/flagged/photo-1556637640-2c80d3201be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+                alt="product image"
+              />
+            </a>
+            <span class="absolute top-0 left-0 w-28 translate-y-4 -translate-x-6 -rotate-45 bg-black text-center text-sm text-white">
+              Sale
+            </span>
+            <div class="mt-4 px-5 pb-5">
+              <a href="#">
+                <h5 class="text-xl font-semibold mb-6 tracking-tight text-slate-900">
+                  Nike Air MX Super 5000
+                </h5>
+              </a>
+              <div class="flex items-center justify-between">
+                <p>
+                  <span class="text-3xl font-bold text-slate-900">$249</span>
+                  <span class="text-sm text-slate-900 line-through">$299</span>
+                </p>
+                <a
+                  href="#"
+                  class="flex items-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="mr-2 h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                  Add to cart
+                </a>
+              </div>
+            </div>
+          </div> */}
+        </>
       ) : (
         <div className="w-full border relative border-[#cccccc] bg-white shadow-lg rounded-lg mb-4 p-4">
           <div className="flex w-full">
             <div>
               <Image
+                width={1000}
+                height={1000}
                 className="w-[320px] h-[180px] object-cover mr-4"
                 src={
-                  product.imagepath && product.product_cover
-                    ? `${product.imagepath}/${product.product_cover}`
+                  imagepath && product.product_cover
+                    ? `${imagepath}/${product.product_token}/${product.product_cover}`
                     : defaultImage
                 }
                 alt="product image"

@@ -12,6 +12,8 @@ const page = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userData, setUserData] = useState("");
+  const [imagepath, setImagePath] = useState("");
+
 
   const allUserData = Cookies.get("userData");
   const cartToken = Cookies.get("user_token");
@@ -44,6 +46,8 @@ const page = () => {
 
         SetProductCartData(response?.data.products);
         SetProductCartImgPath(response?.data?.imagepath);
+        setImagePath(response?.data?.imagepath);
+
       } catch (error) {
         setError("Error fetching data");
         console.error("Error fetching data:", error);
@@ -60,7 +64,7 @@ const page = () => {
   const cartData = {
     products: ProductCartData?.map((product) => ({
       cart_id: product.cart_id,
-      image: `${ProductCartImgPath}/${product.product_cover}`,
+      image: `${imagepath}/${product.product_token}/${product.product_cover}`,
       product_name: product.product_name,
       price: product.total_amount,
       quantity: product.product_quantity,

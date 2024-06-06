@@ -30,7 +30,7 @@ export default function MainSidebar({
           </h2>
 
           <div className="grid grid-cols-10">
-            <div className="md:col-span-2">
+            <div className="md:col-span-2 col-span-12">
               <SideFilters
                 categories={categories}
                 brands={brands}
@@ -41,7 +41,7 @@ export default function MainSidebar({
                 selectedMakes={selectedMakes}
               />
             </div>
-            <div className="md:col-span-8 pl-12">
+            <div className="md:col-span-8 col-span-12 md:pl-12">
               <ProductsCatalogue
                 viewMode={viewMode}
                 addToCart={addToCart}
